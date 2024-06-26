@@ -5,6 +5,7 @@ import json
 from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import numpy as np
+import random
 
 def vader_score(text):
     '''
@@ -34,7 +35,7 @@ def textblob_score(text):
     score_subjectivity = textblob_sentiment.sentiment.subjectivity
     return score_polarity, score_subjectivity
 
-def sentiment_histogram(vader_scores, textblob_scores, cnt):
+def sentiment_histogram(vader_scores, textblob_scores, cnt, sentiment_output_path, cue_val=None, cue_type=None):
     bins = np.arange(-1, 3)
 
     # Creating the histogram data
@@ -52,13 +53,22 @@ def sentiment_histogram(vader_scores, textblob_scores, cnt):
     ax.bar(bins[:-1] + width/2, hist_textblob, width=width, label='Textblob analysis', color='orange')
 
     # Adding titles and labels
-    ax.set_title(f'Cue value: 7 Rings, # memories: {cnt}')
+    
     ax.set_xlabel('Polarity values')
     ax.set_ylabel('Frequency')
     ax.legend()
 
-    # Showing the plot
-    plt.show()
+    # Saving the plot
+    if cue_type != None:
+        ax.set_title(f'Cue value: {cue_val}, # memories: {cnt}')
+        plt.savefig(
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+    else:
+        ax.set_title(f'All Memories, # memories: {cnt}')
+        plt.savefig(
+            f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
+
+    # plt.show()
 
 def polarity_score(score, sentiment_threshold):
     if score > sentiment_threshold:
@@ -67,6 +77,49 @@ def polarity_score(score, sentiment_threshold):
         return -1
     else:
         return 0
+
+def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str):
+    
+    # Find the unique cue values for a given cue type
+    unique_cue_values = df[cue_type].unique()
+    print(f'Unique cues :: \n{unique_cue_values}')
+
+    for cue_val in unique_cue_values:
+
+        # Find the data of a particular cue value for a particular cue type
+        # Extract the 'Memory_Text' column
+        # Drop NaN values and convert to a list
+        filtered_df = df[df[cue_type] == cue_val]
+        memory_texts = filtered_df['Memory_text'].dropna().tolist()
+        cnt = len(memory_texts)
+
+        vader_scores = []
+        textblob_scores = []
+        for memory in memory_texts:
+            _, _, _, vader = vader_score(memory)
+            txtblob, _ = textblob_score(memory)
+            vader_scores.append(polarity_score(vader, sentiment_threshold))
+            textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
+
+        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, cnt=cnt, sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+
+def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
+    # Extract the 'Memory_Text' column
+    # Drop NaN values and convert to a list
+    # memory_texts = df['Memory_text'].dropna().tolist()
+    # cnt = len(memory_texts)
+    memory_texts = df['Memory_text'].dropna().tolist()
+    cnt = len(memory_texts)
+
+    vader_scores = []
+    textblob_scores = []
+    for memory in memory_texts:
+        _, _, _, vader = vader_score(memory)
+        txtblob, _ = textblob_score(memory)
+        vader_scores.append(polarity_score(vader, sentiment_threshold))
+        textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
+
+    sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, cnt=cnt, sentiment_output_path=sentiment_output_path)
 
 if __name__ == '__main__':
 
@@ -87,23 +140,14 @@ if __name__ == '__main__':
     df_columns = df.columns.to_list()
     print(f'Data columns are :: \n{df_columns}')
 
-    # Extract the 'Memory_Text' column
-    # Drop NaN values and convert to a list
-    # memory_texts = df['Memory_text'].dropna().tolist()
-    # cnt = len(memory_texts)
-    filtered_df = df[df['Song'] == '7 Rings']
-    memory_texts = filtered_df['Memory_text'].dropna().tolist()
-    cnt = len(memory_texts)
+    random.seed(seed_value)
+    np.random.seed(seed_value)
 
-    vader_scores = []
-    textblob_scores = []
-    for memory in memory_texts:
-        _, _, _, vader = vader_score(memory)
-        txtblob, _ = textblob_score(memory)
-        vader_scores.append(polarity_score(vader, sentiment_threshold))
-        textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
+    # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
+    # cue_type = 'Singer'
+    # for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+    for cue_type in ['Year']:
+        print()
+        sentimentByCueType(cue_type=cue_type, df=df, sentiment_output_path=sentiment_output_path)
 
-        # print(f'sentence: {memory} \n VADER sentiment score: {vader} \n TextBlob score: {txtblob}')
-        # print("=" * 30)
-
-    sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, cnt=cnt)
+    sentimentOverall(df=df, sentiment_output_path=sentiment_output_path)
