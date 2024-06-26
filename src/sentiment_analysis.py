@@ -60,6 +60,14 @@ def sentiment_histogram(vader_scores, textblob_scores, cnt):
     # Showing the plot
     plt.show()
 
+def polarity_score(score, sentiment_threshold):
+    if score > sentiment_threshold:
+        return 1
+    elif score < (-1 * sentiment_threshold):
+        return -1
+    else:
+        return 0
+
 if __name__ == '__main__':
 
     # Open the parameter file to get necessary parameters
@@ -83,7 +91,7 @@ if __name__ == '__main__':
     # Drop NaN values and convert to a list
     # memory_texts = df['Memory_text'].dropna().tolist()
     # cnt = len(memory_texts)
-    filtered_df = df[df['Song'] == 'Bad Guy']
+    filtered_df = df[df['Song'] == '7 Rings']
     memory_texts = filtered_df['Memory_text'].dropna().tolist()
     cnt = len(memory_texts)
 
@@ -92,20 +100,10 @@ if __name__ == '__main__':
     for memory in memory_texts:
         _, _, _, vader = vader_score(memory)
         txtblob, _ = textblob_score(memory)
-        if vader > 0.1:
-            vader_scores.append(1)
-        elif vader < -0.1:
-            vader_scores.append(-1)
-        else:
-            vader_scores.append(0)
-        
-        if txtblob > 0.1:
-            textblob_scores.append(1)
-        elif txtblob < -0.1:
-            textblob_scores.append(-1)
-        else:
-            textblob_scores.append(0)
-        print(f'sentence: {memory} \n VADER sentiment score: {vader} \n TextBlob score: {txtblob}')
-        print("=" * 30)
+        vader_scores.append(polarity_score(vader, sentiment_threshold))
+        textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
+
+        # print(f'sentence: {memory} \n VADER sentiment score: {vader} \n TextBlob score: {txtblob}')
+        # print("=" * 30)
 
     sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, cnt=cnt)
