@@ -104,7 +104,6 @@ if __name__ == '__main__':
     data_file_path = param['data']['all_memories_path']
     stopwords = param['data']['stopwords']
     wordcloud_output_path = param['output']['wordcloud_output_path']
-    sentiment_output_path = param['output']['sentiment_output_path']
 
     # Read the excel file for the data
     df = pd.read_excel(data_file_path)
