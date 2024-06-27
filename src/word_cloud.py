@@ -5,7 +5,7 @@ import pandas as pd
 import json
 
 
-def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list):
+def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str):
     '''
     cue_type: [Song, Condition, Year, Singer] are the examples in the given work
     df: The entire data frame for a given dataset
@@ -40,7 +40,8 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list):
         # Display the generated word cloud
         plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud, interpolation='bilinear')
-        plt.title(f'Cue type: {cue_val}, # memories: {cnt}')
+        plt.title(
+            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
 
         # Remove ticks and labels on both axes
         plt.xticks([])  # Remove ticks on the x-axis
@@ -53,7 +54,7 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list):
     return wordcloud
 
 
-def wordCloudOverall(df: pd.DataFrame, stopwords: list):
+def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str):
     '''
     df: The entire data frame for a given dataset
     stopwords: particular words we don't need to be included in the word cloud
@@ -113,6 +114,8 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords)
+        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords,
+                           seed_value=seed_value, wordcloud_output_path=wordcloud_output_path)
 
-    wordCloudOverall(df=df, stopwords=stopwords)
+    wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value,
+                     wordcloud_output_path=wordcloud_output_path)
