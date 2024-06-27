@@ -40,7 +40,8 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
         # Display the generated word cloud
         plt.figure(figsize=(10, 5))
         plt.imshow(wordcloud, interpolation='bilinear')
-        plt.title(f'Cue type: {cue_val}, # memories: {cnt}')
+        plt.title(
+            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
 
         # Remove ticks and labels on both axes
         plt.xticks([])  # Remove ticks on the x-axis
@@ -113,6 +114,8 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords, seed_value=seed_value, wordcloud_output_path=wordcloud_output_path)
+        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords,
+                           seed_value=seed_value, wordcloud_output_path=wordcloud_output_path)
 
-    wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value, wordcloud_output_path=wordcloud_output_path)
+    wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value,
+                     wordcloud_output_path=wordcloud_output_path)
