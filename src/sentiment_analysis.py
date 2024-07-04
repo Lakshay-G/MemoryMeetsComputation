@@ -48,37 +48,56 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     cue_val: None (by default) if the dataset is not separated by cue types. If it is separated, enter the individual cue_val from the cue_type.
     The function saves a histogram plot in the respective output location.
     '''
-    bins = np.arange(-1, 3)
+    # bins = np.arange(-1, 3)
+    bins = np.arange(-1, 1.2, step=0.4)
+    # print(bins)
 
     # Creating the histogram data
     hist_vader, _ = np.histogram(vader_scores, bins=bins)
+    # print(hist_vader)
     hist_textblob, _ = np.histogram(textblob_scores, bins=bins)
+    # print(hist_textblob)
+    # Normalize histograms to get probabilities
+    hist_vader_prob = hist_vader / sum(hist_vader)
+    hist_textblob_prob = hist_textblob / sum(hist_textblob)
 
     # Setting the width of each bar
-    width = 0.35
+    width = 0.15
 
     # Creating the figure and axes
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
 
+    # # Plotting the histograms
+    # bins = np.arange(-0.8, 1.3, step=0.4)
+    # ax.bar(bins[:-1] - width/2, hist_vader, width=width,
+    #        label='VADER analysis', color='blue')
+    # ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
+    #        label='Textblob analysis', color='orange')
     # Plotting the histograms
-    ax.bar(bins[:-1] - width/2, hist_vader, width=width,
+    bins = np.arange(-0.8, 1.3, step=0.4)
+    ax.bar(bins[:-1] - width/2, hist_vader_prob, width=width,
            label='VADER analysis', color='blue')
-    ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
+    ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
            label='Textblob analysis', color='orange')
 
     # Adding titles and labels
     ax.set_xlabel('Polarity values')
-    ax.set_ylabel('Frequency')
+    ax.set_ylabel('Probability')
+
+    # Set x-ticks to bin values
+    ax.set_xticks(bins[:-1])
+    ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
     ax.legend()
+    plt.xlim(-1, 1)
 
     # Saving the plot
     if cue_type != None:
-        ax.set_title(
+        plt.title(
             f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
         plt.savefig(
             f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
     else:
-        ax.set_title(f'All Memories, # memories: {cnt}')
+        plt.title(f'All Memories, # memories: {cnt}')
         plt.savefig(
             f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
 
@@ -86,13 +105,25 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     plt.close()
 
 
+# def polarity_score(score: float, sentiment_threshold: float):
+#     if score > sentiment_threshold:
+#         return 1
+#     elif score < (-1 * sentiment_threshold):
+#         return -1
+#     else:
+#         return 0
+
 def polarity_score(score: float, sentiment_threshold: float):
-    if score > sentiment_threshold:
-        return 1
-    elif score < (-1 * sentiment_threshold):
-        return -1
-    else:
+    if score >= 0.6:
+        return 0.8
+    elif score >= 0.2:
+        return 0.4
+    elif score >  -0.2:
         return 0
+    elif score > -0.6:
+        return -0.4
+    elif score >= -1.0:
+        return -0.8
 
 
 def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str):
@@ -181,6 +212,7 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+    # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
                            sentiment_output_path=sentiment_output_path)
