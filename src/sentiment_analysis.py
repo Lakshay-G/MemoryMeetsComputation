@@ -115,6 +115,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
     ax.legend()
     plt.xlim(-1, 1)
+    plt.tight_layout()
 
     # Saving the plot
     if cue_type != None:
