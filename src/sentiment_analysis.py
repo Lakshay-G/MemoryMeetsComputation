@@ -6,6 +6,7 @@ from textblob import TextBlob
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import numpy as np
 import random
+from sklearn import metrics
 
 
 def vader_score(text: str):
@@ -121,15 +122,46 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     if cue_type != None:
         plt.title(
             f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
-        plt.savefig(
-            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+        # plt.savefig(
+        #     f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
     else:
         plt.title(f'All Memories, # memories: {cnt}')
-        plt.savefig(
-            f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
+        # plt.savefig(
+        #     f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
 
     # plt.show()
     plt.close()
+
+    # print(len(selfvalence_scores), '\n', len(
+    #     vader_scores), '\n', len(textblob_scores))
+
+    cm_vader = metrics.confusion_matrix(
+        np.array(selfvalence_scores)*10, np.array(vader_scores)*10)
+    cm_display = metrics.ConfusionMatrixDisplay(
+        confusion_matrix=cm_vader, display_labels=[-0.8, -0.4, 0, 0.4, 0.8])
+
+    cm_display.plot()
+    accuracy_vader = np.trace(cm_vader) / float(np.sum(cm_vader))
+    plt.xlabel('VADER scores')
+    plt.ylabel('Self valence scores')
+    # print(f'Accuracy VADER = {accuracy_vader:.3f}')
+    plt.figtext(
+        0.5, 0.9, f'Accuracy={accuracy_vader:.3f}', ha='center', fontsize=12)
+    plt.show()
+
+    cm_textblob = metrics.confusion_matrix(
+        np.array(selfvalence_scores)*10, np.array(textblob_scores)*10)
+    cm_display = metrics.ConfusionMatrixDisplay(
+        confusion_matrix=cm_textblob, display_labels=[-0.8, -0.4, 0, 0.4, 0.8])
+
+    cm_display.plot()
+    accuracy_textblob = np.trace(cm_textblob) / float(np.sum(cm_textblob))
+    plt.xlabel('Textblob scores')
+    plt.ylabel('Self valence scores')
+    # print(f'Accuracy textblob = {accuracy_textblob:.3f}')
+    plt.figtext(
+        0.5, 0.9, f'Accuracy={accuracy_textblob:.3f}', ha='center', fontsize=12)
+    plt.show()
 
 
 # def polarity_score(score: float, sentiment_threshold: float):
@@ -241,8 +273,8 @@ if __name__ == '__main__':
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
-    for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-        # for cue_type in ['Year']:
+    # for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+    for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
                            sentiment_output_path=sentiment_output_path)
