@@ -38,7 +38,7 @@ def textblob_score(text: str):
     return score_polarity, score_subjectivity
 
 
-def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
+def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
     '''
     vader_scores: Takes in polarity scores generated from Vader method
     textblob_scores: Takes in polarity scores generated from Textblob method
@@ -49,6 +49,20 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     The function saves a histogram plot in the respective output location.
     '''
     # bins = np.arange(-1, 3)
+
+    # print(selfvalence_scores)
+    for i in range(len(selfvalence_scores)):
+        if selfvalence_scores[i] == 1:
+            selfvalence_scores[i] = -0.8
+        elif selfvalence_scores[i] == 2:
+            selfvalence_scores[i] = -0.4
+        elif selfvalence_scores[i] == 3:
+            selfvalence_scores[i] = 0
+        elif selfvalence_scores[i] == 4:
+            selfvalence_scores[i] = 0.4
+        elif selfvalence_scores[i] == 5:
+            selfvalence_scores[i] = 0.8
+
     bins = np.arange(-1, 1.2, step=0.4)
     # print(bins)
 
@@ -57,12 +71,16 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     # print(hist_vader)
     hist_textblob, _ = np.histogram(textblob_scores, bins=bins)
     # print(hist_textblob)
+    hist_selfvalence, _ = np.histogram(selfvalence_scores, bins=bins)
+    # print(hist_selfvalence)
+
     # Normalize histograms to get probabilities
     hist_vader_prob = hist_vader / sum(hist_vader)
     hist_textblob_prob = hist_textblob / sum(hist_textblob)
+    hist_selfvalence_prob = hist_selfvalence / sum(hist_selfvalence)
 
     # Setting the width of each bar
-    width = 0.15
+    width = 0.2
 
     # Creating the figure and axes
     _, ax = plt.subplots()
@@ -75,10 +93,18 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     #        label='Textblob analysis', color='orange')
     # Plotting the histograms
     bins = np.arange(-0.8, 1.3, step=0.4)
-    ax.bar(bins[:-1] - width/2, hist_vader_prob, width=width,
-           label='VADER analysis', color='blue')
-    ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
-           label='Textblob analysis', color='orange')
+    # ax.bar(bins[:-1] + width/2, hist_vader_prob, width=width,
+    #        label='VADER analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='blue')
+    # ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
+    #        label='Textblob analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='red')
+    # ax.bar(bins[:-1] + width/2, hist_selfvalence_prob, width=width,
+    #        label='Self valence (truth)', alpha=0.75, linewidth=2, fill=False, edgecolor='green')
+    ax.bar(bins[:-1], hist_selfvalence_prob, width=width,
+           label='Self valence (truth)', alpha=0.5, linewidth=1, color='grey', edgecolor='darkgrey')
+    ax.bar(bins[:-1] - width/4, hist_vader_prob, width=width/2,
+           label='VADER analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='blue')
+    ax.bar(bins[:-1] + width/4, hist_textblob_prob, width=width/2,
+           label='Textblob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
 
     # Adding titles and labels
     ax.set_xlabel('Polarity values')
@@ -118,7 +144,7 @@ def polarity_score(score: float, sentiment_threshold: float):
         return 0.8
     elif score >= 0.2:
         return 0.4
-    elif score >  -0.2:
+    elif score > -0.2:
         return 0
     elif score > -0.6:
         return -0.4
@@ -145,6 +171,7 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
         memory_texts = filtered_df['Memory_text'].dropna().tolist()
+        selfvalence_scores = filtered_df['Valence'].dropna().tolist()
         cnt = len(memory_texts)
 
         vader_scores = []
@@ -156,7 +183,7 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
             textblob_scores.append(polarity_score(
                 txtblob, sentiment_threshold))
 
-        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, cnt=cnt,
+        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
                             sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
 
 
@@ -172,6 +199,8 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
     # memory_texts = df['Memory_text'].dropna().tolist()
     # cnt = len(memory_texts)
     memory_texts = df['Memory_text'].dropna().tolist()
+    selfvalence_scores = df['Valence'].dropna().tolist()
+
     cnt = len(memory_texts)
 
     vader_scores = []
@@ -182,7 +211,7 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
         vader_scores.append(polarity_score(vader, sentiment_threshold))
         textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
 
-    sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores,
+    sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
                         cnt=cnt, sentiment_output_path=sentiment_output_path)
 
 
@@ -212,7 +241,7 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-    # for cue_type in ['Year']:
+        # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
                            sentiment_output_path=sentiment_output_path)
