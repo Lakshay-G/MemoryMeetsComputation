@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: The Box, # memories: 48
+
+		 VADER 			 Textblob 
+Accuracy: 0.4166666666666667, 0.3125 
+Precision: [0.         0.         0.41666667 0.47058824 0.38888889], [0.         0.         0.32258065 0.36363636 0.25      ] 
+Recall: [0.         0.         0.3125     0.47058824 0.5       ], [0.         0.         0.625      0.23529412 0.07142857] 
+F1: [0.         0.         0.35714286 0.47058824 0.4375    ], [0.         0.         0.42553191 0.28571429 0.11111111]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         1
+           3       0.42      0.31      0.36        16
+           4       0.47      0.47      0.47        17
+           5       0.39      0.50      0.44        14
+
+   micro avg       0.42      0.42      0.42        48
+   macro avg       0.26      0.26      0.25        48
+weighted avg       0.42      0.42      0.41        48
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         1
+           3       0.32      0.62      0.43        16
+           4       0.36      0.24      0.29        17
+           5       0.25      0.07      0.11        14
+
+   micro avg       0.31      0.31      0.31        48
+   macro avg       0.19      0.19      0.16        48
+weighted avg       0.31      0.31      0.28        48

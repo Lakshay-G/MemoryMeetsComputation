@@ -116,61 +116,160 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
     ax.legend()
     plt.xlim(-1, 1)
-    plt.tight_layout()
 
     # Saving the plot
     if cue_type != None:
         plt.title(
             f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
-        # plt.savefig(
-        #     f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
     else:
         plt.title(f'All Memories, # memories: {cnt}')
-        # plt.savefig(
-        #     f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
 
     # plt.show()
     plt.close()
 
-    # print(len(selfvalence_scores), '\n', len(
-    #     vader_scores), '\n', len(textblob_scores))
 
+def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, confusion_output_path: str, cue_val=None, cue_type=None):
+
+    for i in range(len(vader_scores)):
+        if vader_scores[i] == -0.8:
+            vader_scores[i] = 1
+        elif vader_scores[i] == -0.4:
+            vader_scores[i] = 2
+        elif vader_scores[i] == 0:
+            vader_scores[i] = 3
+        elif vader_scores[i] == 0.4:
+            vader_scores[i] = 4
+        elif vader_scores[i] == 0.8:
+            vader_scores[i] = 5
+
+    for i in range(len(textblob_scores)):
+        if textblob_scores[i] == -0.8:
+            textblob_scores[i] = 1
+        elif textblob_scores[i] == -0.4:
+            textblob_scores[i] = 2
+        elif textblob_scores[i] == 0:
+            textblob_scores[i] = 3
+        elif textblob_scores[i] == 0.4:
+            textblob_scores[i] = 4
+        elif textblob_scores[i] == 0.8:
+            textblob_scores[i] = 5
+
+    # print(vader_scores, textblob_scores, selfvalence_scores)
+    labels = [1, 2, 3, 4, 5]
+
+    # Check the unique values of the true and predicted (VADER, Textblob) values.
+    '''    
+    unique_values, counts = np.unique(
+        np.array(vader_scores), return_counts=True)
+    print('Vader scores: ', unique_values, counts)
+    unique_values, counts = np.unique(
+        np.array(textblob_scores), return_counts=True)
+    print('Textblob scores: ', unique_values, counts)
+    # print('Self valence scores: ')
+    unique_values, counts = np.unique(
+        np.array(selfvalence_scores), return_counts=True)
+    print('Self valence scores: ', unique_values, counts, '\n')
+
+    df_vader, df_textblob, df_self = pd.DataFrame([vader_scores]), pd.DataFrame(
+        [textblob_scores]), pd.DataFrame([selfvalence_scores])
+    print(df_vader.nunique(axis=1), df_textblob.nunique(axis=1),
+          df_self.nunique(axis=1))
+    '''
     cm_vader = metrics.confusion_matrix(
-        np.array(selfvalence_scores)*10, np.array(vader_scores)*10)
-    cm_display = metrics.ConfusionMatrixDisplay(
-        confusion_matrix=cm_vader, display_labels=[-0.8, -0.4, 0, 0.4, 0.8])
-
-    cm_display.plot()
-    accuracy_vader = np.trace(cm_vader) / float(np.sum(cm_vader))
-    plt.xlabel('VADER scores')
-    plt.ylabel('Self valence scores')
-    # print(f'Accuracy VADER = {accuracy_vader:.3f}')
-    plt.figtext(
-        0.5, 0.9, f'Accuracy={accuracy_vader:.3f}', ha='center', fontsize=12)
-    plt.show()
-
+        np.array(selfvalence_scores), np.array(vader_scores), labels=labels)
     cm_textblob = metrics.confusion_matrix(
-        np.array(selfvalence_scores)*10, np.array(textblob_scores)*10)
-    cm_display = metrics.ConfusionMatrixDisplay(
-        confusion_matrix=cm_textblob, display_labels=[-0.8, -0.4, 0, 0.4, 0.8])
+        np.array(selfvalence_scores), np.array(textblob_scores), labels=labels)
 
-    cm_display.plot()
+    # Create subplots
+    fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+    display_vader = metrics.ConfusionMatrixDisplay(
+        confusion_matrix=cm_vader, display_labels=labels)
+    display_textblob = metrics.ConfusionMatrixDisplay(
+        confusion_matrix=cm_textblob, display_labels=labels)
+
+    display_vader.plot(cmap='Blues', ax=ax[0], values_format='d')
+    display_textblob.plot(cmap='Blues', ax=ax[1], values_format='d')
+
+    ax[0].set_title('VADER Confusion Matrix')
+    ax[0].set_xlabel('VADER labels')
+    ax[0].set_ylabel('Self valence labels')
+    ax[1].set_title('TextBlob Confusion Matrix')
+    ax[1].set_xlabel('TextBlob labels')
+    ax[1].set_ylabel('Self valence labels')
+
+    if cue_type != None:
+        plt.suptitle(
+            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}', fontsize=16)
+        fig.tight_layout()
+        plt.savefig(
+            f'{confusion_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+    else:
+        plt.suptitle(f'All Memories, # memories: {cnt}', fontsize=16)
+        fig.tight_layout()
+        plt.savefig(
+            f'{confusion_output_path}/All_Memories_{cnt}.png', format='PNG')
+
+    # plt.show()
+    plt.close()
+
+    # Compute all the metrics now for VADER and TextBlob together
+
+    accuracy_vader = np.trace(cm_vader) / float(np.sum(cm_vader))
     accuracy_textblob = np.trace(cm_textblob) / float(np.sum(cm_textblob))
-    plt.xlabel('Textblob scores')
-    plt.ylabel('Self valence scores')
-    # print(f'Accuracy textblob = {accuracy_textblob:.3f}')
-    plt.figtext(
-        0.5, 0.9, f'Accuracy={accuracy_textblob:.3f}', ha='center', fontsize=12)
-    plt.show()
 
+    precision_vader = metrics.precision_score(
+        np.array(selfvalence_scores), np.array(vader_scores), average=None, labels=labels, zero_division=0)
+    recall_vader = metrics.recall_score(
+        np.array(selfvalence_scores), np.array(vader_scores), average=None, labels=labels, zero_division=0)
+    # specificity_vader = metrics.recall_score(
+    #     np.array(selfvalence_scores), np.array(vader_scores), average=None, labels=[1, 2, 3, 4, 5], zero_division=0, pos_label=0)
+    f1_vader = metrics.f1_score(
+        np.array(selfvalence_scores), np.array(vader_scores), average=None, labels=labels, zero_division=0)
 
-# def polarity_score(score: float, sentiment_threshold: float):
-#     if score > sentiment_threshold:
-#         return 1
-#     elif score < (-1 * sentiment_threshold):
-#         return -1
-#     else:
-#         return 0
+    precision_textblob = metrics.precision_score(
+        np.array(selfvalence_scores), np.array(textblob_scores), average=None, labels=labels, zero_division=0)
+    recall_textblob = metrics.recall_score(
+        np.array(selfvalence_scores), np.array(textblob_scores), average=None, labels=labels, zero_division=0)
+    # specificity_textblob = metrics.recall_score(
+    #     np.array(selfvalence_scores), np.array(textblob_scores), pos_label=0, average=None, labels=[1, 2, 3, 4, 5], zero_division=0)
+    f1_textblob = metrics.f1_score(
+        np.array(selfvalence_scores), np.array(textblob_scores), average=None, labels=labels, zero_division=0)
+
+    if cue_type != None:
+        computed_report = f'\n\t\t VADER \t\t\t Textblob \nAccuracy: {accuracy_vader}, {accuracy_textblob} \nPrecision: {precision_vader}, {precision_textblob} \nRecall: {recall_vader}, {recall_textblob} \nF1: {f1_vader}, {f1_textblob}'
+        vader_cls_report = f'\n\nVADER \t\n' + metrics.classification_report(y_true=selfvalence_scores,
+                                                                             y_pred=vader_scores, labels=labels, target_names=['1', '2', '3', '4', '5'], zero_division=0)
+        textblob_cls_report = f'\nTextblob \t\n' + metrics.classification_report(y_true=selfvalence_scores,
+                                                                                 y_pred=textblob_scores, labels=labels, target_names=['1', '2', '3', '4', '5'], zero_division=0)
+        with open(f'{confusion_output_path}/{cue_type}/{cue_val}_{cnt}.txt', 'w') as f:
+            f.write(
+                f'TextBlob Classification Report\t\t\t-> Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}\n')
+            f.write(computed_report)
+            f.write(vader_cls_report)
+            f.write(textblob_cls_report)
+        f.close()
+    else:
+        computed_report = f'\n\t\t VADER \t\t\t Textblob \nAccuracy: {accuracy_vader}, {accuracy_textblob} \nPrecision: {precision_vader}, {precision_textblob} \nRecall: {recall_vader}, {recall_textblob} \nF1: {f1_vader}, {f1_textblob}'
+        vader_cls_report = f'\n\nVADER \t\n' + metrics.classification_report(y_true=selfvalence_scores,
+                                                                             y_pred=vader_scores, target_names=['1', '2', '3', '4', '5'], zero_division=0)
+        textblob_cls_report = f'\nTextblob \t\n' + metrics.classification_report(y_true=selfvalence_scores,
+                                                                                 y_pred=textblob_scores, target_names=['1', '2', '3', '4', '5'], zero_division=0)
+        with open(f'{confusion_output_path}/All_Memories_{cnt}.txt', 'w') as f:
+            f.write(
+                f'TextBlob Classification Report\t\t\t-> All Memories, # memories: {cnt}\n')
+            f.write(computed_report)
+            f.write(vader_cls_report)
+            f.write(textblob_cls_report)
+        f.close()
+
+    # print(computed_report, vader_cls_report, textblob_cls_report)
+
 
 def polarity_score(score: float, sentiment_threshold: float):
     if score >= 0.6:
@@ -185,7 +284,7 @@ def polarity_score(score: float, sentiment_threshold: float):
         return -0.8
 
 
-def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str):
+def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str, method: str):
     '''
     cue_type: [Song, Condition, Year, Singer] are the examples in the given work
     df: The entire data frame for a given dataset
@@ -209,18 +308,27 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
 
         vader_scores = []
         textblob_scores = []
+
+        # Parse through all the memories
         for memory in memory_texts:
+            # Compute VADER and Textblob score of individual memory
             _, _, _, vader = vader_score(memory)
             txtblob, _ = textblob_score(memory)
+
+            # Make an array of the VADER and Textblob scores of the memories
             vader_scores.append(polarity_score(vader, sentiment_threshold))
             textblob_scores.append(polarity_score(
                 txtblob, sentiment_threshold))
 
-        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
-                            sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+        if method == 'hist':
+            sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
+                                sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+        elif method == 'cm':
+            confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
+                             confusion_output_path=confusion_output_path, cue_val=cue_val, cue_type=cue_type)
 
 
-def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
+def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_output_path: str, method: str):
     '''
     df: The entire data frame for a given dataset
     sentiment_output_path: Output path for the plots
@@ -244,8 +352,12 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
         vader_scores.append(polarity_score(vader, sentiment_threshold))
         textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
 
-    sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
-                        cnt=cnt, sentiment_output_path=sentiment_output_path)
+    if method == 'hist':
+        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
+                            cnt=cnt, sentiment_output_path=sentiment_output_path)
+    elif method == 'cm':
+        confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores,
+                         selfvalence_scores=selfvalence_scores, cnt=cnt, confusion_output_path=confusion_output_path)
 
 
 if __name__ == '__main__':
@@ -261,6 +373,7 @@ if __name__ == '__main__':
     stopwords = param['data']['stopwords']
     sentiment_threshold = param['data']['sentiment_threshold']
     sentiment_output_path = param['output']['sentiment_output_path']
+    confusion_output_path = param['output']['confusion_output_path']
 
     # Read the excel file for the data
     df = pd.read_excel(data_file_path)
@@ -273,10 +386,11 @@ if __name__ == '__main__':
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
-    # for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-    for cue_type in ['Year']:
+    for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+        # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path)
+                           sentiment_output_path=sentiment_output_path, method='hist')
 
-    sentimentOverall(df=df, sentiment_output_path=sentiment_output_path)
+    sentimentOverall(
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')

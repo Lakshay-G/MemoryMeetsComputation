@@ -9,6 +9,7 @@
     },
     "output": {
         "wordcloud_output_path": "src/WordClouds",
-        "sentiment_output_path": "src/SentimentAnalysis"
+        "sentiment_output_path": "src/SentimentAnalysis",
+        "confusion_output_path": "src/ConfusionMatrices"
     }
 }
