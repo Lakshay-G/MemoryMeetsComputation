@@ -3,9 +3,48 @@ from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
 import pandas as pd
 import json
+import numpy as np
 
 
-def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str):
+def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcount_output_path: str, cue_type=None, cue_val=None):
+    # Get the raw word counts from the word cloud
+    raw_word_counts = wordcloud.process_text(all_memory_texts)
+
+    # Get the top 10 most popular words by raw count
+    top_10_words = sorted(raw_word_counts.items(),
+                          key=lambda x: x[1], reverse=True)[:10]
+
+    # Print the top 10 words with their raw counts
+    words = []
+    counts = []
+    for word, count in top_10_words:
+        # print(f"{word}: {count}")
+        # sum += count
+        words.append(word)
+        counts.append(count)
+
+    # print(sum)
+    plt.figure(figsize=(8, 5))
+    plt.barh(words, counts, color='orange')
+    plt.ylabel('Words')
+    plt.xlabel('Frequency of words')
+    plt.gca().invert_yaxis()
+    if cue_type != None:
+        plt.title(
+            f'Top 10 words in Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{wordcount_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+    else:
+        plt.title(f'Top 10 words in All Memories, # memories : {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{wordcount_output_path}/All_Memories_{cnt}.png', format='PNG')
+
+    plt.close()
+
+
+def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
     '''
     cue_type: [Song, Condition, Year, Singer] are the examples in the given work
     df: The entire data frame for a given dataset
@@ -51,10 +90,14 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
             f'{wordcloud_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
         # plt.show()
         plt.close()
+
+        wordCountPlot(wordcloud=wordcloud, all_memory_texts=all_memory_texts,
+                      cnt=cnt, wordcount_output_path=wordcount_output_path, cue_type=cue_type, cue_val=cue_val)
+
     return wordcloud
 
 
-def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str):
+def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
     '''
     df: The entire data frame for a given dataset
     stopwords: particular words we don't need to be included in the word cloud
@@ -90,6 +133,10 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
         f'{wordcloud_output_path}/All_Memories_{cnt}.png', format='PNG')
     # plt.show()
     plt.close()
+
+    wordCountPlot(wordcloud=wordcloud, all_memory_texts=all_memory_texts,
+                  cnt=cnt, wordcount_output_path=wordcount_output_path)
+
     return wordcloud
 
 
@@ -105,6 +152,7 @@ if __name__ == '__main__':
     data_file_path = param['data']['all_memories_path']
     stopwords = param['data']['stopwords']
     wordcloud_output_path = param['output']['wordcloud_output_path']
+    wordcount_output_path = param['output']['wordcount_output_path']
 
     # Read the excel file for the data
     df = pd.read_excel(data_file_path)
@@ -114,8 +162,9 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords,
-                           seed_value=seed_value, wordcloud_output_path=wordcloud_output_path)
+        # for cue_type in ['Year']:
+        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords, seed_value=seed_value,
+                           wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
 
     wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value,
-                     wordcloud_output_path=wordcloud_output_path)
+                     wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
