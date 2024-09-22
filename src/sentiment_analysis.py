@@ -110,10 +110,10 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
     for cue_val in unique_cue_values:
 
         # Find the data of a particular cue value for a particular cue type
-        # Extract the 'Memory_Text' column
+        # Extract the 'Text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['Memory_text'].dropna().tolist()
+        memory_texts = filtered_df['text'].dropna().tolist()
         cnt = len(memory_texts)
 
         vader_scores = []
@@ -136,11 +136,11 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
     The function returns the saves the histogram for the sentiment analysis in all of dataset.
     '''
 
-    # Extract the 'Memory_Text' column
+    # Extract the 'Text' column
     # Drop NaN values and convert to a list
-    # memory_texts = df['Memory_text'].dropna().tolist()
+    # memory_texts = df['text'].dropna().tolist()
     # cnt = len(memory_texts)
-    memory_texts = df['Memory_text'].dropna().tolist()
+    memory_texts = df['text'].dropna().tolist()
     cnt = len(memory_texts)
 
     vader_scores = []

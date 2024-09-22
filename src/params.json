@@ -2,7 +2,7 @@
     "data": {
         "seed_value": 20867263,
         "instrument_only_memories_path": "asset/Instruments_only_Memory_Descriptions_20240612.xlsx",
-        "all_memories_path": "asset/All_Memory_Descriptions_20240619.xlsx",
+        "all_memories_path": "asset/Preprocessing_step_3_with_metadata.xlsx",
         "exclusions_memories_path": "asset/Memory_Descriptions_with_Exclusions_20240619.xlsx",
         "stopwords": ["listening", "time", "song", "songs", "hearing", "music", "remember", "remembered", "heard", "remind", "reminds", "reminded", "listen", "listened"],
         "sentiment_threshold": 0.01
