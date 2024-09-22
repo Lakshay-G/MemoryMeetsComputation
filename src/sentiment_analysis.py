@@ -419,10 +419,10 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
     for cue_val in unique_cue_values:
 
         # Find the data of a particular cue value for a particular cue type
-        # Extract the 'Memory_Text' column
+        # Extract the 'Text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['Memory_text'].dropna().tolist()
+        memory_texts = filtered_df['text'].dropna().tolist()
         selfvalence_scores = filtered_df['Valence'].dropna().tolist()
         cnt = len(memory_texts)
 
@@ -455,12 +455,17 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
     The function returns the saves the histogram for the sentiment analysis in all of dataset.
     '''
 
-    # Extract the 'Memory_Text' column
+    # Extract the 'Text' column
     # Drop NaN values and convert to a list
-    # memory_texts = df['Memory_text'].dropna().tolist()
+    # memory_texts = df['text'].dropna().tolist()
     # cnt = len(memory_texts)
-    memory_texts = df['Memory_text'].dropna().tolist()
+    memory_texts = df['text'].dropna().tolist()
     selfvalence_scores = df['Valence'].dropna().tolist()
+    # print('things are okay')
+    # print(memory_texts['Subject'] == selfvalence_scores['Subject'])
+    # if (memory_texts['Subject'].equals(selfvalence_scores['Subject'])):
+    #     print('everyting is okay!!!!')
+    # exit()
 
     cnt = len(memory_texts)
 
@@ -501,16 +506,16 @@ if __name__ == '__main__':
     print(f'Data columns are :: \n{df_columns}')
 
     # Ensures to get the repeated results
-    random.seed(seed_value)
-    np.random.seed(seed_value)
+    # random.seed(seed_value)
+    # np.random.seed(seed_value)
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
+    # issue with #469, #843, #842 in step3 xlsx
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
                            sentiment_output_path=sentiment_output_path, method='hist')
-
     sentimentOverall(
         df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')

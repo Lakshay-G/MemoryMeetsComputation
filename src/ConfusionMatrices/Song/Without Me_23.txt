@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Without Me, # memories: 23
+
+		 VADER 			 Textblob 
+Accuracy: 0.6956521739130435, 0.4782608695652174 
+Precision: [0.         0.         0.75       0.75       0.57142857], [0.         0.         0.58333333 0.4        0.        ] 
+Recall: [0.         0.         0.81818182 0.375      1.        ], [0.         0.         0.63636364 0.5        0.        ] 
+F1: [0.         0.         0.7826087  0.5        0.72727273], [0.         0.         0.60869565 0.44444444 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.75      0.82      0.78        11
+           4       0.75      0.38      0.50         8
+           5       0.57      1.00      0.73         4
+
+   micro avg       0.70      0.70      0.70        23
+   macro avg       0.41      0.44      0.40        23
+weighted avg       0.72      0.70      0.67        23
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.58      0.64      0.61        11
+           4       0.40      0.50      0.44         8
+           5       0.00      0.00      0.00         4
+
+   micro avg       0.48      0.48      0.48        23
+   macro avg       0.20      0.23      0.21        23
+weighted avg       0.42      0.48      0.45        23

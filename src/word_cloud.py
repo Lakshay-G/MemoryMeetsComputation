@@ -60,10 +60,10 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
     for cue_val in unique_cue_values:
 
         # Find the data of a particular cue value for a particular cue type
-        # Extract the 'Memory_Text' column
+        # Extract the 'text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['Memory_text'].dropna().tolist()
+        memory_texts = filtered_df['text'].dropna().tolist()
         cnt = len(memory_texts)
 
         # Combine all texts into a single string if needed
@@ -105,9 +105,9 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
              Also, this function saves the word cloud image in the WordClouds folder.
     '''
 
-    # Extract the 'Memory_Text' column
+    # Extract the 'text' column
     # Drop NaN values and convert to a list
-    memory_texts = df['Memory_text'].dropna().tolist()
+    memory_texts = df['text'].dropna().tolist()
     cnt = len(memory_texts)
 
     # Combine all texts into a single string if needed

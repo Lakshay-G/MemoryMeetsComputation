@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Drivers License, # memories: 23
+
+		 VADER 			 Textblob 
+Accuracy: 0.2608695652173913, 0.30434782608695654 
+Precision: [0.         0.         0.         0.33333333 0.375     ], [0.         0.         0.27272727 0.42857143 0.5       ] 
+Recall: [0.         0.         0.         0.33333333 0.42857143], [0.         0.         0.5        0.33333333 0.14285714] 
+F1: [0.         0.         0.         0.33333333 0.4       ], [0.         0.         0.35294118 0.375      0.22222222]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         1
+           2       0.00      0.00      0.00         0
+           3       0.00      0.00      0.00         6
+           4       0.33      0.33      0.33         9
+           5       0.38      0.43      0.40         7
+
+    accuracy                           0.26        23
+   macro avg       0.14      0.15      0.15        23
+weighted avg       0.24      0.26      0.25        23
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         1
+           2       0.00      0.00      0.00         0
+           3       0.27      0.50      0.35         6
+           4       0.43      0.33      0.38         9
+           5       0.50      0.14      0.22         7
+
+    accuracy                           0.30        23
+   macro avg       0.24      0.20      0.19        23
+weighted avg       0.39      0.30      0.31        23
