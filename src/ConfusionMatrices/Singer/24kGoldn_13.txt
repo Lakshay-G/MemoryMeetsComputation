@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: 24kGoldn, # memories: 13
+
+		 VADER 			 Textblob 
+Accuracy: 0.3076923076923077, 0.23076923076923078 
+Precision: [0.         0.         0.         0.57142857 0.        ], [0.  0.  0.  0.6 0. ] 
+Recall: [0.  0.  0.  0.5 0. ], [0.    0.    0.    0.375 0.   ] 
+F1: [0.         0.         0.         0.53333333 0.        ], [0.         0.         0.         0.46153846 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.00      0.00      0.00         3
+           4       0.57      0.50      0.53         8
+           5       0.00      0.00      0.00         2
+
+   micro avg       0.31      0.31      0.31        13
+   macro avg       0.11      0.10      0.11        13
+weighted avg       0.35      0.31      0.33        13
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.00      0.00      0.00         3
+           4       0.60      0.38      0.46         8
+           5       0.00      0.00      0.00         2
+
+   micro avg       0.23      0.23      0.23        13
+   macro avg       0.12      0.07      0.09        13
+weighted avg       0.37      0.23      0.28        13

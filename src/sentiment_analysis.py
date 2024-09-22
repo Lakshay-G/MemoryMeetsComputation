@@ -511,11 +511,11 @@ if __name__ == '__main__':
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
-    # issue with #469, #843, #842 in step3 xlsx
+    # issue with in #842 blank valence number step4 xlsx
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method='hist')
+                           sentiment_output_path=sentiment_output_path, method='cm')
     sentimentOverall(
-        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='cm')

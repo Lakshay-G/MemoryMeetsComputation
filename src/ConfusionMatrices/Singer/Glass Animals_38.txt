@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Glass Animals, # memories: 38
+
+		 VADER 			 Textblob 
+Accuracy: 0.42105263157894735, 0.21052631578947367 
+Precision: [0.         0.         0.08333333 0.6        0.6       ], [0.         0.         0.15789474 0.33333333 0.33333333] 
+Recall: [0.         0.         0.14285714 0.6        0.42857143], [0.         0.         0.42857143 0.26666667 0.07142857] 
+F1: [0.         0.         0.10526316 0.6        0.5       ], [0.         0.         0.23076923 0.2962963  0.11764706]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         2
+           3       0.08      0.14      0.11         7
+           4       0.60      0.60      0.60        15
+           5       0.60      0.43      0.50        14
+
+    accuracy                           0.42        38
+   macro avg       0.26      0.23      0.24        38
+weighted avg       0.47      0.42      0.44        38
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         2
+           3       0.16      0.43      0.23         7
+           4       0.33      0.27      0.30        15
+           5       0.33      0.07      0.12        14
+
+   micro avg       0.21      0.21      0.21        38
+   macro avg       0.16      0.15      0.13        38
+weighted avg       0.28      0.21      0.20        38

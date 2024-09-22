@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Billie Eilish, # memories: 41
+
+		 VADER 			 Textblob 
+Accuracy: 0.43902439024390244, 0.43902439024390244 
+Precision: [0.         0.         0.5        0.61538462 0.23076923], [0.         0.         0.45833333 0.46153846 0.5       ] 
+Recall: [0.         0.         0.41176471 0.42105263 0.6       ], [0.         0.         0.64705882 0.31578947 0.2       ] 
+F1: [0.         0.         0.4516129  0.5        0.33333333], [0.         0.         0.53658537 0.375      0.28571429]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.50      0.41      0.45        17
+           4       0.62      0.42      0.50        19
+           5       0.23      0.60      0.33         5
+
+   micro avg       0.44      0.44      0.44        41
+   macro avg       0.27      0.29      0.26        41
+weighted avg       0.52      0.44      0.46        41
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.46      0.65      0.54        17
+           4       0.46      0.32      0.38        19
+           5       0.50      0.20      0.29         5
+
+    accuracy                           0.44        41
+   macro avg       0.28      0.23      0.24        41
+weighted avg       0.46      0.44      0.43        41

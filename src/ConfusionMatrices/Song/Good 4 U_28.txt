@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Good 4 U, # memories: 28
+
+		 VADER 			 Textblob 
+Accuracy: 0.25, 0.42857142857142855 
+Precision: [0.         0.25       0.125      0.22222222 0.42857143], [0.         0.         0.3        0.83333333 0.5       ] 
+Recall: [0.         0.5        0.16666667 0.18181818 0.33333333], [0.         0.         1.         0.45454545 0.11111111] 
+F1: [0.         0.33333333 0.14285714 0.2        0.375     ], [0.         0.         0.46153846 0.58823529 0.18181818]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.25      0.50      0.33         2
+           3       0.12      0.17      0.14         6
+           4       0.22      0.18      0.20        11
+           5       0.43      0.33      0.38         9
+
+   micro avg       0.25      0.25      0.25        28
+   macro avg       0.21      0.24      0.21        28
+weighted avg       0.27      0.25      0.25        28
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         2
+           3       0.30      1.00      0.46         6
+           4       0.83      0.45      0.59        11
+           5       0.50      0.11      0.18         9
+
+   micro avg       0.43      0.43      0.43        28
+   macro avg       0.33      0.31      0.25        28
+weighted avg       0.55      0.43      0.39        28
