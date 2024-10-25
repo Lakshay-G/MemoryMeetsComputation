@@ -142,7 +142,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     # bins = np.arange(-1, 3)
 
     # print(selfvalence_scores)
-    for i in range(len(selfvalence_scores)):
+    '''for i in range(len(selfvalence_scores)):
         if selfvalence_scores[i] == 1:
             selfvalence_scores[i] = -0.8
         elif selfvalence_scores[i] == 2:
@@ -152,10 +152,12 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
         elif selfvalence_scores[i] == 4:
             selfvalence_scores[i] = 0.4
         elif selfvalence_scores[i] == 5:
-            selfvalence_scores[i] = 0.8
+            selfvalence_scores[i] = 0.8'''
 
-    bins = np.arange(-1, 1.2, step=0.4)
+    # bins = np.arange(-1, 1.2, step=0.4)
     # print(bins)
+    bins = np.arange(0.5, 6.5, step=1)
+    print(bins)
 
     # Creating the histogram data
     hist_vader, _ = np.histogram(vader_scores, bins=bins)
@@ -171,7 +173,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     hist_selfvalence_prob = hist_selfvalence / sum(hist_selfvalence)
 
     # Setting the width of each bar
-    width = 0.2
+    width = 0.5
 
     # Creating the figure and axes
     _, ax = plt.subplots()
@@ -183,7 +185,10 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     # ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
     #        label='Textblob analysis', color='orange')
     # Plotting the histograms
-    bins = np.arange(-0.8, 1.3, step=0.4)
+    # bins = np.arange(-0.8, 1.3, step=0.4)
+    # print(bins)
+    bins = np.arange(1, 6.5, step=1)
+    print(bins)
     # ax.bar(bins[:-1] + width/2, hist_vader_prob, width=width,
     #        label='VADER analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='blue')
     # ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
@@ -199,14 +204,14 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
            label='Textblob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
 
     # Adding titles and labels
-    ax.set_xlabel('Polarity values')
+    ax.set_xlabel('Valence scores')
     ax.set_ylabel('Probability')
 
     # Set x-ticks to bin values
     ax.set_xticks(bins[:-1])
     ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
     ax.legend()
-    plt.xlim(-1, 1)
+    plt.xlim(0.5, 5.5)
 
     # Saving the plot
     if cue_type != None:
@@ -363,7 +368,7 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
 
 
 def polarity_score(score: float, sentiment_threshold: float):
-    if score >= 0.6:
+    '''if score >= 0.6:
         return 0.8
     elif score >= 0.2:
         return 0.4
@@ -372,7 +377,17 @@ def polarity_score(score: float, sentiment_threshold: float):
     elif score > -0.6:
         return -0.4
     elif score >= -1.0:
-        return -0.8
+        return -0.8'''
+    if score >= 0.6:
+        return 5
+    elif score >= 0.2:
+        return 4
+    elif score > -0.2:
+        return 3
+    elif score > -0.6:
+        return 2
+    elif score >= -1.0:
+        return 1
 
 
 def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str, method: str):
@@ -390,10 +405,10 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
     for cue_val in unique_cue_values:
 
         # Find the data of a particular cue value for a particular cue type
-        # Extract the 'Text' column
+        # Extract the 'Memory_Text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['text'].dropna().tolist()
+        memory_texts = filtered_df['Memory_text'].dropna().tolist()
         selfvalence_scores = filtered_df['Valence'].dropna().tolist()
         cnt = len(memory_texts)
 
@@ -426,11 +441,11 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
     The function returns the saves the histogram for the sentiment analysis in all of dataset.
     '''
 
-    # Extract the 'Text' column
+    # Extract the 'Memory_Text' column
     # Drop NaN values and convert to a list
-    # memory_texts = df['text'].dropna().tolist()
+    # memory_texts = df['Memory_text'].dropna().tolist()
     # cnt = len(memory_texts)
-    memory_texts = df['text'].dropna().tolist()
+    memory_texts = df['Memory_text'].dropna().tolist()
     selfvalence_scores = df['Valence'].dropna().tolist()
     # print('things are okay')
     # print(memory_texts['Subject'] == selfvalence_scores['Subject'])
