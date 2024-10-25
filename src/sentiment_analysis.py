@@ -142,20 +142,6 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     # bins = np.arange(-1, 3)
 
     # print(selfvalence_scores)
-    '''for i in range(len(selfvalence_scores)):
-        if selfvalence_scores[i] == 1:
-            selfvalence_scores[i] = -0.8
-        elif selfvalence_scores[i] == 2:
-            selfvalence_scores[i] = -0.4
-        elif selfvalence_scores[i] == 3:
-            selfvalence_scores[i] = 0
-        elif selfvalence_scores[i] == 4:
-            selfvalence_scores[i] = 0.4
-        elif selfvalence_scores[i] == 5:
-            selfvalence_scores[i] = 0.8'''
-
-    # bins = np.arange(-1, 1.2, step=0.4)
-    # print(bins)
     bins = np.arange(0.5, 6.5, step=1)
     print(bins)
 
@@ -185,8 +171,6 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     # ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
     #        label='Textblob analysis', color='orange')
     # Plotting the histograms
-    # bins = np.arange(-0.8, 1.3, step=0.4)
-    # print(bins)
     bins = np.arange(1, 6.5, step=1)
     print(bins)
     # ax.bar(bins[:-1] + width/2, hist_vader_prob, width=width,
