@@ -52,7 +52,9 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
 
     # Creating the histogram data
     hist_vader, _ = np.histogram(vader_scores, bins=bins)
+    # print(sum(hist_vader))
     hist_textblob, _ = np.histogram(textblob_scores, bins=bins)
+    # print(sum(hist_textblob))
 
     # Setting the width of each bar
     width = 0.35
@@ -61,14 +63,15 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, cnt: int, sen
     fig, ax = plt.subplots()
 
     # Plotting the histograms
-    ax.bar(bins[:-1] - width/2, hist_vader, width=width,
+    ax.bar(bins[:-1] - width/2, hist_vader / sum(hist_vader), width=width,
            label='VADER analysis', color='blue')
-    ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
+    ax.bar(bins[:-1] + width/2, hist_textblob / sum(hist_textblob), width=width,
            label='Textblob analysis', color='orange')
 
     # Adding titles and labels
-    ax.set_xlabel('Polarity values')
-    ax.set_ylabel('Frequency')
+    # ax.set_xlabel('Polarity values')
+    ax.set_xlabel('Valence scores')
+    ax.set_ylabel('Frequency probability')
     ax.legend()
 
     # Saving the plot
@@ -113,7 +116,7 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
         # Extract the 'Text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['text'].dropna().tolist()
+        memory_texts = filtered_df['Memory_text'].dropna().tolist()
         cnt = len(memory_texts)
 
         vader_scores = []
@@ -140,7 +143,7 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str):
     # Drop NaN values and convert to a list
     # memory_texts = df['text'].dropna().tolist()
     # cnt = len(memory_texts)
-    memory_texts = df['text'].dropna().tolist()
+    memory_texts = df['Memory_text'].dropna().tolist()
     cnt = len(memory_texts)
 
     vader_scores = []
