@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Levitating, # memories: 41
+
+		 VADER 			 Textblob 
+Accuracy: 0.4878048780487805, 0.34146341463414637 
+Precision: [0.         0.5        0.3125     0.72222222 0.25      ], [0.         0.         0.25       0.66666667 0.        ] 
+Recall: [0.         0.2        0.71428571 0.54166667 0.2       ], [0.         0.         0.85714286 0.33333333 0.        ] 
+F1: [0.         0.28571429 0.43478261 0.61904762 0.22222222], [0.         0.         0.38709677 0.44444444 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.50      0.20      0.29         5
+           3       0.31      0.71      0.43         7
+           4       0.72      0.54      0.62        24
+           5       0.25      0.20      0.22         5
+
+    accuracy                           0.49        41
+   macro avg       0.36      0.33      0.31        41
+weighted avg       0.57      0.49      0.50        41
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         5
+           3       0.25      0.86      0.39         7
+           4       0.67      0.33      0.44        24
+           5       0.00      0.00      0.00         5
+
+    accuracy                           0.34        41
+   macro avg       0.18      0.24      0.17        41
+weighted avg       0.43      0.34      0.33        41

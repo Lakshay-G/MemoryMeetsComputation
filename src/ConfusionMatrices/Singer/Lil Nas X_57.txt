@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Lil Nas X, # memories: 57
+
+		 VADER 			 Textblob 
+Accuracy: 0.42105263157894735, 0.2982456140350877 
+Precision: [0.         0.5        0.45       0.43478261 0.36363636], [0.      0.      0.28125 0.5     0.     ] 
+Recall: [0.         0.2        0.5625     0.4        0.36363636], [0.     0.     0.5625 0.32   0.    ] 
+F1: [0.         0.28571429 0.5        0.41666667 0.36363636], [0.        0.        0.375     0.3902439 0.       ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.50      0.20      0.29         5
+           3       0.45      0.56      0.50        16
+           4       0.43      0.40      0.42        25
+           5       0.36      0.36      0.36        11
+
+    accuracy                           0.42        57
+   macro avg       0.35      0.31      0.31        57
+weighted avg       0.43      0.42      0.42        57
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         5
+           3       0.28      0.56      0.38        16
+           4       0.50      0.32      0.39        25
+           5       0.00      0.00      0.00        11
+
+   micro avg       0.30      0.30      0.30        57
+   macro avg       0.16      0.18      0.15        57
+weighted avg       0.30      0.30      0.28        57

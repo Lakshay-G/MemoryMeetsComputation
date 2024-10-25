@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Adele, # memories: 22
+
+		 VADER 			 Textblob 
+Accuracy: 0.3181818181818182, 0.36363636363636365 
+Precision: [0.         0.         0.28571429 0.5        0.22222222], [0.         1.         0.28571429 0.5        0.        ] 
+Recall: [0.         0.         0.33333333 0.3        0.66666667], [0.         0.33333333 0.66666667 0.3        0.        ] 
+F1: [0.         0.         0.30769231 0.375      0.33333333], [0.    0.5   0.4   0.375 0.   ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         3
+           3       0.29      0.33      0.31         6
+           4       0.50      0.30      0.38        10
+           5       0.22      0.67      0.33         3
+
+   micro avg       0.32      0.32      0.32        22
+   macro avg       0.20      0.26      0.20        22
+weighted avg       0.34      0.32      0.30        22
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       1.00      0.33      0.50         3
+           3       0.29      0.67      0.40         6
+           4       0.50      0.30      0.38        10
+           5       0.00      0.00      0.00         3
+
+   micro avg       0.36      0.36      0.36        22
+   macro avg       0.36      0.26      0.26        22
+weighted avg       0.44      0.36      0.35        22

@@ -143,7 +143,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
 
     # print(selfvalence_scores)
     bins = np.arange(0.5, 6.5, step=1)
-    print(bins)
+    # print(bins)
 
     # Creating the histogram data
     hist_vader, _ = np.histogram(vader_scores, bins=bins)
@@ -172,7 +172,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     #        label='Textblob analysis', color='orange')
     # Plotting the histograms
     bins = np.arange(1, 6.5, step=1)
-    print(bins)
+    # print(bins)
     # ax.bar(bins[:-1] + width/2, hist_vader_prob, width=width,
     #        label='VADER analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='blue')
     # ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
@@ -215,8 +215,7 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
 
 
 def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, confusion_output_path: str, cue_val=None, cue_type=None):
-
-    for i in range(len(vader_scores)):
+    '''for i in range(len(vader_scores)):
         if vader_scores[i] == -0.8:
             vader_scores[i] = 1
         elif vader_scores[i] == -0.4:
@@ -238,7 +237,7 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
         elif textblob_scores[i] == 0.4:
             textblob_scores[i] = 4
         elif textblob_scores[i] == 0.8:
-            textblob_scores[i] = 5
+            textblob_scores[i] = 5'''
 
     # print(vader_scores, textblob_scores, selfvalence_scores)
     labels = [1, 2, 3, 4, 5]
@@ -336,6 +335,7 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
         f.close()
     else:
         computed_report = f'\n\t\t VADER \t\t\t Textblob \nAccuracy: {accuracy_vader}, {accuracy_textblob} \nPrecision: {precision_vader}, {precision_textblob} \nRecall: {recall_vader}, {recall_textblob} \nF1: {f1_vader}, {f1_textblob}'
+        # print(selfvalence_scores, vader_scores)
         vader_cls_report = f'\n\nVADER \t\n' + metrics.classification_report(y_true=selfvalence_scores,
                                                                              y_pred=vader_scores, target_names=['1', '2', '3', '4', '5'], zero_division=0)
         textblob_cls_report = f'\nTextblob \t\n' + metrics.classification_report(y_true=selfvalence_scores,

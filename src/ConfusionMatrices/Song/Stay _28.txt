@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Stay , # memories: 28
+
+		 VADER 			 Textblob 
+Accuracy: 0.39285714285714285, 0.39285714285714285 
+Precision: [0.         0.         0.4        0.3        0.66666667], [0.         0.         0.38095238 0.5        0.66666667] 
+Recall: [0.         0.         0.6        0.33333333 0.28571429], [0.         0.         0.8        0.11111111 0.28571429] 
+F1: [0.         0.         0.48       0.31578947 0.4       ], [0.         0.         0.51612903 0.18181818 0.4       ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         2
+           2       0.00      0.00      0.00         0
+           3       0.40      0.60      0.48        10
+           4       0.30      0.33      0.32         9
+           5       0.67      0.29      0.40         7
+
+   micro avg       0.39      0.39      0.39        28
+   macro avg       0.27      0.24      0.24        28
+weighted avg       0.41      0.39      0.37        28
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         2
+           2       0.00      0.00      0.00         0
+           3       0.38      0.80      0.52        10
+           4       0.50      0.11      0.18         9
+           5       0.67      0.29      0.40         7
+
+    accuracy                           0.39        28
+   macro avg       0.31      0.24      0.22        28
+weighted avg       0.46      0.39      0.34        28
