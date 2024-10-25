@@ -14,6 +14,13 @@ def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcou
     top_10_words = sorted(raw_word_counts.items(),
                           key=lambda x: x[1], reverse=True)[:10]
 
+    # This specific part counts cnns to make sure that we have total # of words for a given cue_type (excluding stopwords)
+    '''raw_word_counts = sorted(raw_word_counts.items(),
+                             key=lambda x: x[1], reverse=True)
+    cnns = 0
+    for _, cnn in raw_word_counts:
+        cnns += cnn'''
+
     # Print the top 10 words with their raw counts
     words = []
     counts = []
@@ -24,10 +31,13 @@ def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcou
         counts.append(count)
 
     # print(sum)
+    # print(words, counts)
+    # print(sum(counts))
     plt.figure(figsize=(8, 5))
-    plt.barh(words, counts, color='orange')
+    plt.barh(words, np.array(counts) / sum(counts), color='orange')
+    # plt.barh(words, np.array(counts) / cnns, color='orange')
     plt.ylabel('Words')
-    plt.xlabel('Frequency of words')
+    plt.xlabel('Frequency of words (Probability)')
     plt.gca().invert_yaxis()
     if cue_type != None:
         plt.title(
@@ -60,10 +70,10 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
     for cue_val in unique_cue_values:
 
         # Find the data of a particular cue value for a particular cue type
-        # Extract the 'text' column
+        # Extract the 'Memory_text' column
         # Drop NaN values and convert to a list
         filtered_df = df[df[cue_type] == cue_val]
-        memory_texts = filtered_df['text'].dropna().tolist()
+        memory_texts = filtered_df['Memory_text'].dropna().tolist()
         cnt = len(memory_texts)
 
         # Combine all texts into a single string if needed
@@ -105,9 +115,9 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
              Also, this function saves the word cloud image in the WordClouds folder.
     '''
 
-    # Extract the 'text' column
+    # Extract the 'Memory_text' column
     # Drop NaN values and convert to a list
-    memory_texts = df['text'].dropna().tolist()
+    memory_texts = df['Memory_text'].dropna().tolist()
     cnt = len(memory_texts)
 
     # Combine all texts into a single string if needed
