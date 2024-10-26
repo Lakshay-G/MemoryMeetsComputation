@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Roddy Ricch, # memories: 43
+
+		 VADER 			 Textblob 
+Accuracy: 0.4186046511627907, 0.27906976744186046 
+Precision: [0.         0.         0.33333333 0.53333333 0.38888889], [0.         0.         0.26923077 0.36363636 0.25      ] 
+Recall: [0.         0.         0.23076923 0.5        0.5       ], [0.         0.         0.53846154 0.25       0.07142857] 
+F1: [0.         0.         0.27272727 0.51612903 0.4375    ], [0.         0.         0.35897436 0.2962963  0.11111111]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.33      0.23      0.27        13
+           4       0.53      0.50      0.52        16
+           5       0.39      0.50      0.44        14
+
+   micro avg       0.42      0.42      0.42        43
+   macro avg       0.25      0.25      0.25        43
+weighted avg       0.43      0.42      0.42        43
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.27      0.54      0.36        13
+           4       0.36      0.25      0.30        16
+           5       0.25      0.07      0.11        14
+
+   micro avg       0.28      0.28      0.28        43
+   macro avg       0.18      0.17      0.15        43
+weighted avg       0.30      0.28      0.25        43
