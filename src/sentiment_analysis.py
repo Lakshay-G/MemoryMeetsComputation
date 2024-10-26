@@ -216,12 +216,12 @@ def sentiment_histogram_vis2(vader_scores: list, textblob_scores: list, selfvale
             f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
-            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_newtype.png', format='PNG')
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_vis2.png', format='PNG')
     else:
         plt.title(f'All Memories, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
-            f'{sentiment_output_path}/All_Memories_{cnt}_newtype.png', format='PNG')
+            f'{sentiment_output_path}/All_Memories_{cnt}_vis2.png', format='PNG')
 
     # plt.show()
     plt.close()
@@ -289,14 +289,66 @@ def sentiment_histogram_vis1(vader_scores: list, textblob_scores: list, selfvale
             f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
-            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_vis1.png', format='PNG')
     else:
         plt.title(f'All Memories, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
-            f'{sentiment_output_path}/All_Memories_{cnt}.png', format='PNG')
+            f'{sentiment_output_path}/All_Memories_{cnt}_vis1.png', format='PNG')
 
     # plt.show()
+    plt.close()
+
+
+def sentiment_histogram_vis3(vader_scores: list, textblob_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
+    '''
+    vader_scores: Takes in polarity scores generated from Vader method
+    textblob_scores: Takes in polarity scores generated from Textblob method
+    cnt: Count of each memories of a particular type
+    sentiment_output_path: Output path for the plots
+    cue_type: None (by default) if the dataset is not separated by cue types. If it is separated, enter the cue_type.
+    cue_val: None (by default) if the dataset is not separated by cue types. If it is separated, enter the individual cue_val from the cue_type.
+    The function saves a histogram plot in the respective output location.
+    '''
+    bins = np.arange(-1, 3)
+
+    # Creating the histogram data
+    hist_vader, _ = np.histogram(vader_scores, bins=bins)
+    hist_textblob, _ = np.histogram(textblob_scores, bins=bins)
+
+    # Setting the width of each bar
+    width = 0.35
+
+    # Creating the figure and axes
+    _, ax = plt.subplots()
+
+    # Plotting the histograms
+    ax.bar(bins[:-1] - width/2, hist_vader / sum(hist_vader), width=width,
+           label='VADER analysis', color='blue')
+    ax.bar(bins[:-1] + width/2, hist_textblob / sum(hist_textblob), width=width,
+           label='Textblob analysis', color='orange')
+
+    # Adding titles and labels
+    ax.set_xlabel('Valence scores')
+    ax.set_ylabel('Probability')
+    ax.legend()
+    plt.xlim(-1.5, 1.5)
+
+    # Saving the plot
+    if cue_type != None:
+        ax.set_title(
+            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_vis3.png', format='PNG')
+    else:
+        ax.set_title(f'All Memories, # memories: {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/All_Memories_{cnt}_vis3.png', format='PNG')
+
+    # plt.show()
+    # exit()
     plt.close()
 
 
@@ -414,17 +466,25 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
     # print(computed_report, vader_cls_report, textblob_cls_report)
 
 
-def polarity_score(score: float, sentiment_threshold: float):
-    if score >= 0.6:
-        return 5
-    elif score >= 0.2:
-        return 4
-    elif score > -0.2:
-        return 3
-    elif score > -0.6:
-        return 2
-    elif score >= -1.0:
-        return 1
+def polarity_score(score: float, sentiment_threshold: float, vis=1):
+    if vis != 3:
+        if score >= 0.6:
+            return 5
+        elif score >= 0.2:
+            return 4
+        elif score > -0.2:
+            return 3
+        elif score > -0.6:
+            return 2
+        elif score >= -1.0:
+            return 1
+    else:
+        if score > sentiment_threshold:
+            return 1
+        elif score < (-1 * sentiment_threshold):
+            return -1
+        else:
+            return 0
 
 
 def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str, method: str):
@@ -451,6 +511,8 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
 
         vader_scores = []
         textblob_scores = []
+        vader_scores_vis3 = []
+        textblob_scores_vis3 = []
 
         # Parse through all the memories
         for memory in memory_texts:
@@ -459,14 +521,21 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
             txtblob, _ = textblob_score(memory)
 
             # Make an array of the VADER and Textblob scores of the memories
-            vader_scores.append(polarity_score(vader, sentiment_threshold))
+            vader_scores.append(polarity_score(
+                vader, sentiment_threshold, vis=1))
             textblob_scores.append(polarity_score(
-                txtblob, sentiment_threshold))
+                txtblob, sentiment_threshold, vis=1))
+            vader_scores_vis3.append(polarity_score(
+                vader, sentiment_threshold, vis=3))
+            textblob_scores_vis3.append(polarity_score(
+                txtblob, sentiment_threshold, vis=3))
 
         if method == 'hist':
             sentiment_histogram_vis1(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
                                      sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
             sentiment_histogram_vis2(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
+                                     sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+            sentiment_histogram_vis3(vader_scores=vader_scores_vis3, textblob_scores=textblob_scores_vis3, cnt=cnt,
                                      sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
         elif method == 'cm':
             confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
@@ -490,16 +559,26 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
 
     vader_scores = []
     textblob_scores = []
+    vader_scores_vis3 = []
+    textblob_scores_vis3 = []
+
     for memory in memory_texts:
         _, _, _, vader = vader_score(memory)
         txtblob, _ = textblob_score(memory)
-        vader_scores.append(polarity_score(vader, sentiment_threshold))
-        textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
+        vader_scores.append(polarity_score(vader, sentiment_threshold, vis=1))
+        textblob_scores.append(polarity_score(
+            txtblob, sentiment_threshold, vis=1))
+        vader_scores_vis3.append(polarity_score(
+            vader, sentiment_threshold, vis=3))
+        textblob_scores_vis3.append(polarity_score(
+            txtblob, sentiment_threshold, vis=3))
 
     if method == 'hist':
         sentiment_histogram_vis1(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
                                  cnt=cnt, sentiment_output_path=sentiment_output_path)
         sentiment_histogram_vis2(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
+                                 cnt=cnt, sentiment_output_path=sentiment_output_path)
+        sentiment_histogram_vis3(vader_scores=vader_scores_vis3, textblob_scores=textblob_scores_vis3,
                                  cnt=cnt, sentiment_output_path=sentiment_output_path)
     elif method == 'cm':
         confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores,
@@ -536,6 +615,6 @@ if __name__ == '__main__':
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method='cm')
+                           sentiment_output_path=sentiment_output_path, method='hist')
     sentimentOverall(
-        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='cm')
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')
