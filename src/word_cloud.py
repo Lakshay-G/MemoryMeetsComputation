@@ -150,6 +150,56 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
     return wordcloud
 
 
+def wordCloudSentiments(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
+    '''
+    df: The entire data frame for a given dataset
+    stopwords: particular words we don't need to be included in the word cloud
+    returns: The function returns the word cloud if needed in future. 
+             Also, this function saves the word cloud image in the WordClouds folder.
+    '''
+
+    for sentiment in ['positive', 'negative', 'neutral']:
+
+        if sentiment == 'positive':
+            df_positive = df[df['Valence'] > 3]
+        elif sentiment == 'negative':
+            df_positive = df[df['Valence'] < 3]
+        elif sentiment == 'neutral':
+            df_positive = df[df['Valence'] == 3]
+
+        # Extract the 'Memory_text' column
+        # Drop NaN values and convert to a list
+        memory_texts = df_positive['Memory_text'].dropna().tolist()
+        cnt = len(memory_texts)
+
+        # Combine all texts into a single string if needed
+        all_memory_texts = ' '.join(memory_texts)
+
+        # Create a set of stop words and add custom stop words
+        custom_stopwords = set(STOPWORDS)
+        custom_stopwords.update(stopwords)
+
+        wordcloud = WordCloud(width=800, height=400,
+                              background_color='white', stopwords=custom_stopwords, colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
+
+        # Display the generated word cloud
+        plt.figure(figsize=(10, 5))
+        plt.imshow(wordcloud, interpolation='bilinear')
+        plt.title(f'All Memories, # memories: {cnt}')
+
+        # Remove ticks and labels on both axes
+        plt.xticks([])  # Remove ticks on the x-axis
+        plt.yticks([])  # Remove ticks on the y-axis
+
+        plt.savefig(
+            f'{wordcloud_output_path}/All_Memories_{cnt}_{sentiment}.png', format='PNG')
+        # plt.show()
+        plt.close()
+    # wordCountPlot(wordcloud=wordcloud, all_memory_texts=all_memory_texts,
+    #               cnt=cnt, wordcount_output_path=wordcount_output_path)
+    # return wordcloud
+
+
 if __name__ == '__main__':
 
     # Open the parameter file to get necessary parameters
@@ -178,3 +228,6 @@ if __name__ == '__main__':
 
     wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value,
                      wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
+
+    wordCloudSentiments(df=df, stopwords=stopwords, seed_value=seed_value,
+                        wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
