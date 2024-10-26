@@ -39,97 +39,195 @@ def textblob_score(text: str):
     return score_polarity, score_subjectivity
 
 
-# def vader_selfvalence_compare(vader_scores: list, selfvalence_scores: list):
-#     count11, count12, count13, count14, count15 = 0, 0, 0, 0, 0
-#     count21, count22, count23, count24, count25 = 0, 0, 0, 0, 0
-#     count31, count32, count33, count34, count35 = 0, 0, 0, 0, 0
-#     count41, count42, count43, count44, count45 = 0, 0, 0, 0, 0
-#     count51, count52, count53, count54, count55 = 0, 0, 0, 0, 0
+'''
+def vader_selfvalence_compare(vader_scores: list, selfvalence_scores: list):
+    count11, count12, count13, count14, count15 = 0, 0, 0, 0, 0
+    count21, count22, count23, count24, count25 = 0, 0, 0, 0, 0
+    count31, count32, count33, count34, count35 = 0, 0, 0, 0, 0
+    count41, count42, count43, count44, count45 = 0, 0, 0, 0, 0
+    count51, count52, count53, count54, count55 = 0, 0, 0, 0, 0
 
-#     for i in range(0, len(vader_scores)):
-#         if selfvalence_scores[i] == -0.8:
-#             if vader_scores[i] == -0.8:
-#                 count11 += 1
-#             elif vader_scores[i] == -0.4:
-#                 count12 += 1
-#             elif vader_scores[i] == 0:
-#                 count13 += 1
-#             elif vader_scores[i] == 0.4:
-#                 count14 += 1
-#             elif vader_scores[i] == 0.8:
-#                 count15 += 1
-#         elif selfvalence_scores[i] == -0.4:
-#             if vader_scores[i] == -0.8:
-#                 count21 += 1
-#             elif vader_scores[i] == -0.4:
-#                 count22 += 1
-#             elif vader_scores[i] == 0:
-#                 count23 += 1
-#             elif vader_scores[i] == 0.4:
-#                 count24 += 1
-#             elif vader_scores[i] == 0.8:
-#                 count25 += 1
-#         elif selfvalence_scores[i] == 0:
-#             if vader_scores[i] == -0.8:
-#                 count31 += 1
-#             elif vader_scores[i] == -0.4:
-#                 count32 += 1
-#             elif vader_scores[i] == 0:
-#                 count33 += 1
-#             elif vader_scores[i] == 0.4:
-#                 count34 += 1
-#             elif vader_scores[i] == 0.8:
-#                 count35 += 1
-#         elif selfvalence_scores[i] == 0.4:
-#             if vader_scores[i] == -0.8:
-#                 count41 += 1
-#             elif vader_scores[i] == -0.4:
-#                 count42 += 1
-#             elif vader_scores[i] == 0:
-#                 count43 += 1
-#             elif vader_scores[i] == 0.4:
-#                 count44 += 1
-#             elif vader_scores[i] == 0.8:
-#                 count45 += 1
-#         elif selfvalence_scores[i] == 0.8:
-#             if vader_scores[i] == -0.8:
-#                 count51 += 1
-#             elif vader_scores[i] == -0.4:
-#                 count52 += 1
-#             elif vader_scores[i] == 0:
-#                 count53 += 1
-#             elif vader_scores[i] == 0.4:
-#                 count54 += 1
-#             elif vader_scores[i] == 0.8:
-#                 count55 += 1
+    for i in range(0, len(vader_scores)):
+        if selfvalence_scores[i] == 1:
+            if vader_scores[i] == 1:
+                count11 += 1
+            elif vader_scores[i] == 2:
+                count12 += 1
+            elif vader_scores[i] == 3:
+                count13 += 1
+            elif vader_scores[i] == 4:
+                count14 += 1
+            elif vader_scores[i] == 5:
+                count15 += 1
+        elif selfvalence_scores[i] == 2:
+            if vader_scores[i] == 1:
+                count21 += 1
+            elif vader_scores[i] == 2:
+                count22 += 1
+            elif vader_scores[i] == 3:
+                count23 += 1
+            elif vader_scores[i] == 4:
+                count24 += 1
+            elif vader_scores[i] == 5:
+                count25 += 1
+        elif selfvalence_scores[i] == 3:
+            if vader_scores[i] == 1:
+                count31 += 1
+            elif vader_scores[i] == 2:
+                count32 += 1
+            elif vader_scores[i] == 3:
+                count33 += 1
+            elif vader_scores[i] == 4:
+                count34 += 1
+            elif vader_scores[i] == 5:
+                count35 += 1
+        elif selfvalence_scores[i] == 4:
+            if vader_scores[i] == 1:
+                count41 += 1
+            elif vader_scores[i] == 2:
+                count42 += 1
+            elif vader_scores[i] == 3:
+                count43 += 1
+            elif vader_scores[i] == 4:
+                count44 += 1
+            elif vader_scores[i] == 5:
+                count45 += 1
+        elif selfvalence_scores[i] == 5:
+            if vader_scores[i] == 1:
+                count51 += 1
+            elif vader_scores[i] == 2:
+                count52 += 1
+            elif vader_scores[i] == 3:
+                count53 += 1
+            elif vader_scores[i] == 4:
+                count54 += 1
+            elif vader_scores[i] == 5:
+                count55 += 1
 
-#     count1 = np.array([count11, count12, count13, count14, count15])
-#     count2 = np.array([count21, count22, count23, count24, count25])
-#     count3 = np.array([count31, count32, count33, count34, count35])
-#     count4 = np.array([count41, count42, count43, count44, count45])
-#     count5 = np.array([count51, count52, count53, count54, count55])
+    count1 = np.array([count11, count12, count13, count14, count15])
+    count2 = np.array([count21, count22, count23, count24, count25])
+    count3 = np.array([count31, count32, count33, count34, count35])
+    count4 = np.array([count41, count42, count43, count44, count45])
+    count5 = np.array([count51, count52, count53, count54, count55])
 
-#     return count1, count2, count3, count4, count5
+    return count1, count2, count3, count4, count5
 
-# # def vader_selfvalence_compare(vader_scores: list, selfvalence_scores: list):
-# #     # Define the possible score values
-# #     scores = [-0.8, -0.4, 0, 0.4, 0.8]
+'''
 
-# #     # Initialize the count dictionary
-# #     counts = {s: {v: 0 for v in scores} for s in scores}
-
-# #     # Count the occurrences
-# #     for s_val, v_val in zip(selfvalence_scores, vader_scores):
-# #         if s_val in counts and v_val in counts[s_val]:
-# #             counts[s_val][v_val] += 1
-
-# #     # Convert counts to numpy arrays
-# #     result = [np.array([counts[s][v] for v in scores]) for s in scores]
-
-# #     return result
+# Complex but shorter version of the above function
 
 
-def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
+def vader_selfvalence_compare(vader_scores: list, selfvalence_scores: list):
+    counts = {s: {v: 0 for v in [1, 2, 3, 4, 5]}
+              for s in [1, 2, 3, 4, 5]}
+
+    for s, v in zip(selfvalence_scores, vader_scores):
+        if s in counts and v in counts[s]:
+            counts[s][v] += 1
+
+    return [np.array([counts[s][v] for v in [1, 2, 3, 4, 5]]) for s in [1, 2, 3, 4, 5]]
+
+
+def sentiment_histogram_vis2(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
+    '''
+    vader_scores: Takes in polarity scores generated from Vader method
+    textblob_scores: Takes in polarity scores generated from Textblob method
+    cnt: Count of each memories of a particular type
+    sentiment_output_path: Output path for the plots
+    cue_type: None (by default) if the dataset is not separated by cue types. If it is separated, enter the cue_type.
+    cue_val: None (by default) if the dataset is not separated by cue types. If it is separated, enter the individual cue_val from the cue_type.
+    The function saves a histogram plot in the respective output location.
+    '''
+    # bins = np.arange(-1, 3)
+
+    # print(selfvalence_scores)
+    bins = np.arange(0.5, 6.5, step=1)
+    # print(bins)
+
+    # Creating the histogram data
+    hist_vader, _ = np.histogram(vader_scores, bins=bins)
+    # print(hist_vader)
+    hist_textblob, _ = np.histogram(textblob_scores, bins=bins)
+    # print(hist_textblob)
+    hist_selfvalence, _ = np.histogram(selfvalence_scores, bins=bins)
+    # print(hist_selfvalence)
+
+    # Normalize histograms to get probabilities
+    hist_vader_prob = hist_vader / sum(hist_vader)
+    hist_textblob_prob = hist_textblob / sum(hist_textblob)
+    hist_selfvalence_prob = hist_selfvalence / sum(hist_selfvalence)
+
+    count_vader1, count_vader2, count_vader3, count_vader4, count_vader5 = vader_selfvalence_compare(
+        vader_scores=vader_scores, selfvalence_scores=selfvalence_scores)
+    count_vader1, count_vader2, count_vader3, count_vader4, count_vader5 = count_vader1 / sum(hist_selfvalence), count_vader2 / sum(
+        hist_selfvalence), count_vader3 / sum(hist_selfvalence), count_vader4 / sum(hist_selfvalence), count_vader5 / sum(hist_selfvalence)
+    count_textblob1, count_textblob2, count_textblob3, count_textblob4, count_textblob5 = vader_selfvalence_compare(
+        vader_scores=textblob_scores, selfvalence_scores=selfvalence_scores)
+    count_textblob1, count_textblob2, count_textblob3, count_textblob4, count_textblob5 = count_textblob1 / sum(hist_selfvalence), count_textblob2 / sum(
+        hist_selfvalence), count_textblob3 / sum(hist_selfvalence), count_textblob4 / sum(hist_selfvalence), count_textblob5 / sum(hist_selfvalence)
+
+    # Setting the width of each bar
+    width = 0.5
+
+    # Creating the figure and axes
+    _, ax = plt.subplots()
+    bins = np.arange(1, 6.5, step=1)
+    # print(bins)
+
+    ax.bar(bins[:-1] - width/4, count_vader1, width=width/2,
+           label='Self valence 1', alpha=0.9, linewidth=1, color='k')
+    ax.bar(bins[:-1] - width/4, count_vader2, width=width/2,
+           label='Self valence 2', alpha=0.9, linewidth=1, bottom=count_vader1, color='grey')
+    ax.bar(bins[:-1] - width/4, count_vader3, width=width/2,
+           label='Self valence 3', alpha=0.9, linewidth=1, bottom=count_vader1+count_vader2, color='darkgrey')
+    ax.bar(bins[:-1] - width/4, count_vader4, width=width/2,
+           label='Self valence 4', alpha=0.9, linewidth=1, bottom=count_vader1+count_vader2+count_vader3, color='lightgrey')
+    ax.bar(bins[:-1] - width/4, count_vader5, width=width/2,
+           label='Self valence 5', alpha=0.9, linewidth=1, bottom=count_vader1+count_vader2+count_vader3+count_vader4, color='whitesmoke')
+    ax.bar(bins[:-1] + width/4, count_textblob1, width=width/2,
+           alpha=0.9, linewidth=1, color='k')
+    ax.bar(bins[:-1] + width/4, count_textblob2, width=width/2,
+           alpha=0.9, linewidth=1, bottom=count_textblob1, color='grey')
+    ax.bar(bins[:-1] + width/4, count_textblob3, width=width/2,
+           alpha=0.9, linewidth=1, bottom=count_textblob1+count_textblob2, color='darkgrey')
+    ax.bar(bins[:-1] + width/4, count_textblob4, width=width/2,
+           alpha=0.9, linewidth=1, bottom=count_textblob1+count_textblob2+count_textblob3, color='lightgrey')
+    ax.bar(bins[:-1] + width/4, count_textblob5, width=width/2,
+           alpha=0.9, linewidth=1, bottom=count_textblob1+count_textblob2+count_textblob3+count_textblob4, color='whitesmoke')
+
+    ax.bar(bins[:-1] - width/4, hist_vader_prob, width=width/2,
+           label='VADER analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='blue')
+    ax.bar(bins[:-1] + width/4, hist_textblob_prob, width=width/2,
+           label='TextBlob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
+
+    # Adding titles and labels
+    ax.set_xlabel('Valence scores')
+    ax.set_ylabel('Probability')
+
+    # Set x-ticks to bin values
+    ax.set_xticks(bins[:-1])
+    ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
+    ax.legend()
+    plt.xlim(0.5, 5.5)
+
+    # Saving the plot
+    if cue_type != None:
+        plt.title(
+            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_newtype.png', format='PNG')
+    else:
+        plt.title(f'All Memories, # memories: {cnt}')
+        plt.tight_layout()
+        plt.savefig(
+            f'{sentiment_output_path}/All_Memories_{cnt}_newtype.png', format='PNG')
+
+    # plt.show()
+    plt.close()
+
+
+def sentiment_histogram_vis1(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, sentiment_output_path: str, cue_val=None, cue_type=None):
     '''
     vader_scores: Takes in polarity scores generated from Vader method
     textblob_scores: Takes in polarity scores generated from Textblob method
@@ -164,28 +262,16 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
     # Creating the figure and axes
     _, ax = plt.subplots()
 
-    # # Plotting the histograms
-    # bins = np.arange(-0.8, 1.3, step=0.4)
-    # ax.bar(bins[:-1] - width/2, hist_vader, width=width,
-    #        label='VADER analysis', color='blue')
-    # ax.bar(bins[:-1] + width/2, hist_textblob, width=width,
-    #        label='Textblob analysis', color='orange')
     # Plotting the histograms
     bins = np.arange(1, 6.5, step=1)
     # print(bins)
-    # ax.bar(bins[:-1] + width/2, hist_vader_prob, width=width,
-    #        label='VADER analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='blue')
-    # ax.bar(bins[:-1] + width/2, hist_textblob_prob, width=width,
-    #        label='Textblob analysis', alpha=0.75, linewidth=2, fill=False, edgecolor='red')
-    # ax.bar(bins[:-1] + width/2, hist_selfvalence_prob, width=width,
-    #        label='Self valence (truth)', alpha=0.75, linewidth=2, fill=False, edgecolor='green')
     ax.bar(bins[:-1], hist_selfvalence_prob, width=width,
            label='Self valence (truth)', alpha=0.5, linewidth=1, color='grey', edgecolor='darkgrey')
 
     ax.bar(bins[:-1] - width/4, hist_vader_prob, width=width/2,
            label='VADER analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='blue')
     ax.bar(bins[:-1] + width/4, hist_textblob_prob, width=width/2,
-           label='Textblob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
+           label='TextBlob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
 
     # Adding titles and labels
     ax.set_xlabel('Valence scores')
@@ -215,29 +301,6 @@ def sentiment_histogram(vader_scores: list, textblob_scores: list, selfvalence_s
 
 
 def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scores: list, cnt: int, confusion_output_path: str, cue_val=None, cue_type=None):
-    '''for i in range(len(vader_scores)):
-        if vader_scores[i] == -0.8:
-            vader_scores[i] = 1
-        elif vader_scores[i] == -0.4:
-            vader_scores[i] = 2
-        elif vader_scores[i] == 0:
-            vader_scores[i] = 3
-        elif vader_scores[i] == 0.4:
-            vader_scores[i] = 4
-        elif vader_scores[i] == 0.8:
-            vader_scores[i] = 5
-
-    for i in range(len(textblob_scores)):
-        if textblob_scores[i] == -0.8:
-            textblob_scores[i] = 1
-        elif textblob_scores[i] == -0.4:
-            textblob_scores[i] = 2
-        elif textblob_scores[i] == 0:
-            textblob_scores[i] = 3
-        elif textblob_scores[i] == 0.4:
-            textblob_scores[i] = 4
-        elif textblob_scores[i] == 0.8:
-            textblob_scores[i] = 5'''
 
     # print(vader_scores, textblob_scores, selfvalence_scores)
     labels = [1, 2, 3, 4, 5]
@@ -352,16 +415,6 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
 
 
 def polarity_score(score: float, sentiment_threshold: float):
-    '''if score >= 0.6:
-        return 0.8
-    elif score >= 0.2:
-        return 0.4
-    elif score > -0.2:
-        return 0
-    elif score > -0.6:
-        return -0.4
-    elif score >= -1.0:
-        return -0.8'''
     if score >= 0.6:
         return 5
     elif score >= 0.2:
@@ -411,8 +464,10 @@ def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: s
                 txtblob, sentiment_threshold))
 
         if method == 'hist':
-            sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
-                                sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+            sentiment_histogram_vis1(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
+                                     sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
+            sentiment_histogram_vis2(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
+                                     sentiment_output_path=sentiment_output_path, cue_val=cue_val, cue_type=cue_type)
         elif method == 'cm':
             confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores, cnt=cnt,
                              confusion_output_path=confusion_output_path, cue_val=cue_val, cue_type=cue_type)
@@ -427,15 +482,9 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
 
     # Extract the 'Memory_Text' column
     # Drop NaN values and convert to a list
-    # memory_texts = df['Memory_text'].dropna().tolist()
     # cnt = len(memory_texts)
     memory_texts = df['Memory_text'].dropna().tolist()
     selfvalence_scores = df['Valence'].dropna().tolist()
-    # print('things are okay')
-    # print(memory_texts['Subject'] == selfvalence_scores['Subject'])
-    # if (memory_texts['Subject'].equals(selfvalence_scores['Subject'])):
-    #     print('everyting is okay!!!!')
-    # exit()
 
     cnt = len(memory_texts)
 
@@ -448,8 +497,10 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
         textblob_scores.append(polarity_score(txtblob, sentiment_threshold))
 
     if method == 'hist':
-        sentiment_histogram(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
-                            cnt=cnt, sentiment_output_path=sentiment_output_path)
+        sentiment_histogram_vis1(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
+                                 cnt=cnt, sentiment_output_path=sentiment_output_path)
+        sentiment_histogram_vis2(vader_scores=vader_scores, textblob_scores=textblob_scores, selfvalence_scores=selfvalence_scores,
+                                 cnt=cnt, sentiment_output_path=sentiment_output_path)
     elif method == 'cm':
         confusion_matrix(vader_scores=vader_scores, textblob_scores=textblob_scores,
                          selfvalence_scores=selfvalence_scores, cnt=cnt, confusion_output_path=confusion_output_path)
@@ -481,11 +532,10 @@ if __name__ == '__main__':
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
-    # issue with in #842 blank valence number step4 xlsx
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method='hist')
+                           sentiment_output_path=sentiment_output_path, method='cm')
     sentimentOverall(
-        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='cm')

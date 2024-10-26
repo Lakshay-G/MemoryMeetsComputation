@@ -52,11 +52,11 @@ def pre_process(memory_text: str):
 
 # Example text
 text_data = 'listening to the always heard angrily beautifully excellently songs when I was in 8th interestingly graded and more better watched the melancholy music videos, a heavy dogs died in it and it was smooth sad.'
-text_data = 'me and my friends singing this song when it came up on the radio in my friends car we were going to the mall in the summer last summer it was a hot day and i think we were going to the mall to shop for a gift for one of my other friends'
-text_data = 'when this song got popular I liked it sorta but I had a grudge against it because bastille was my favourite artist and I felt like they had much better songs that deserved the spotlight more. I expressed this sentiment both my dad and some school friends who all agreed'
-text_data = 'This song got me through my break up. I used to scream sing it while i did school work, took a shower, literally anything'
-text_data = 'This song reminded me of when my friends and I went to my cottage one weekend in the summer. This song was very popular at the time and we kept hearing it everywhere we went. Eventually we all got sick of this song and got frustrated whenever we heard it.'
-text_data = 'this song is on my cottage playlist which I would put on while boating or hanging around at the cottage. Hearing the song makes me thing of summer and the hot weather and smell of being on the lake'
+# text_data = 'me and my friends singing this song when it came up on the radio in my friends car we were going to the mall in the summer last summer it was a hot day and i think we were going to the mall to shop for a gift for one of my other friends'
+# text_data = 'when this song got popular I liked it sorta but I had a grudge against it because bastille was my favourite artist and I felt like they had much better songs that deserved the spotlight more. I expressed this sentiment both my dad and some school friends who all agreed'
+# text_data = 'This song got me through my break up. I used to scream sing it while i did school work, took a shower, literally anything'
+# text_data = 'This song reminded me of when my friends and I went to my cottage one weekend in the summer. This song was very popular at the time and we kept hearing it everywhere we went. Eventually we all got sick of this song and got frustrated whenever we heard it.'
+# text_data = 'this song is on my cottage playlist which I would put on while boating or hanging around at the cottage. Hearing the song makes me thing of summer and the hot weather and smell of being on the lake'
 
 # Pre-process the text
 pre_process(text_data)
