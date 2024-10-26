@@ -6,7 +6,7 @@ import json
 import numpy as np
 
 
-def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcount_output_path: str, cue_type=None, cue_val=None):
+def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcount_output_path: str, cue_type=None, cue_val=None, sentiment=None):
     # Get the raw word counts from the word cloud
     raw_word_counts = wordcloud.process_text(all_memory_texts)
 
@@ -43,13 +43,21 @@ def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcou
         plt.title(
             f'Top 10 words in Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
         plt.tight_layout()
-        plt.savefig(
-            f'{wordcount_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
+        if sentiment:
+            plt.savefig(
+                f'{wordcount_output_path}/{cue_type}/{cue_val}_{cnt}_{sentiment}.png', format='PNG')
+        else:
+            plt.savefig(
+                f'{wordcount_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
     else:
         plt.title(f'Top 10 words in All Memories, # memories : {cnt}')
         plt.tight_layout()
-        plt.savefig(
-            f'{wordcount_output_path}/All_Memories_{cnt}.png', format='PNG')
+        if sentiment:
+            plt.savefig(
+                f'{wordcount_output_path}/All_Memories_{cnt}_{sentiment}.png', format='PNG')
+        else:
+            plt.savefig(
+                f'{wordcount_output_path}/All_Memories_{cnt}.png', format='PNG')
 
     plt.close()
 
@@ -195,8 +203,8 @@ def wordCloudSentiments(df: pd.DataFrame, stopwords: list, seed_value: int, word
             f'{wordcloud_output_path}/All_Memories_{cnt}_{sentiment}.png', format='PNG')
         # plt.show()
         plt.close()
-    # wordCountPlot(wordcloud=wordcloud, all_memory_texts=all_memory_texts,
-    #               cnt=cnt, wordcount_output_path=wordcount_output_path)
+        wordCountPlot(wordcloud=wordcloud, all_memory_texts=all_memory_texts,
+                      cnt=cnt, wordcount_output_path=wordcount_output_path, sentiment=sentiment)
     # return wordcloud
 
 
