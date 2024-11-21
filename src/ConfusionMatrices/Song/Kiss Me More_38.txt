@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Kiss Me More, # memories: 38
+
+		 VADER 			 Textblob 
+Accuracy: 0.34210526315789475, 0.34210526315789475 
+Precision: [0.         0.         0.42857143 0.15384615 0.5       ], [0.         0.         0.4        0.27272727 0.        ] 
+Recall: [0.         0.         0.46153846 0.18181818 0.38461538], [0.         0.         0.76923077 0.27272727 0.        ] 
+F1: [0.         0.         0.44444444 0.16666667 0.43478261], [0.         0.         0.52631579 0.27272727 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         1
+           3       0.43      0.46      0.44        13
+           4       0.15      0.18      0.17        11
+           5       0.50      0.38      0.43        13
+
+   micro avg       0.34      0.34      0.34        38
+   macro avg       0.22      0.21      0.21        38
+weighted avg       0.36      0.34      0.35        38
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         1
+           3       0.40      0.77      0.53        13
+           4       0.27      0.27      0.27        11
+           5       0.00      0.00      0.00        13
+
+   micro avg       0.34      0.34      0.34        38
+   macro avg       0.13      0.21      0.16        38
+weighted avg       0.22      0.34      0.26        38

@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Dua Lipa, # memories: 81
+
+		 VADER 			 Textblob 
+Accuracy: 0.3950617283950617, 0.2839506172839506 
+Precision: [0.         0.4        0.36       0.55555556 0.07142857], [0.         0.         0.1875     0.63636364 0.        ] 
+Recall: [0.         0.2        0.6        0.45454545 0.08333333], [0.         0.         0.6        0.31818182 0.        ] 
+F1: [0.         0.26666667 0.45       0.5        0.07692308], [0.         0.         0.28571429 0.42424242 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.40      0.20      0.27        10
+           3       0.36      0.60      0.45        15
+           4       0.56      0.45      0.50        44
+           5       0.07      0.08      0.08        12
+
+    accuracy                           0.40        81
+   macro avg       0.28      0.27      0.26        81
+weighted avg       0.43      0.40      0.40        81
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00        10
+           3       0.19      0.60      0.29        15
+           4       0.64      0.32      0.42        44
+           5       0.00      0.00      0.00        12
+
+    accuracy                           0.28        81
+   macro avg       0.16      0.18      0.14        81
+weighted avg       0.38      0.28      0.28        81
