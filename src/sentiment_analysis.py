@@ -7,6 +7,7 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 import numpy as np
 import random
 from sklearn import metrics
+from preprocess import preprocessing_pipeline
 
 
 def vader_score(text: str):
@@ -595,15 +596,26 @@ if __name__ == '__main__':
     # Load parameter values
     seed_value = param['data']['seed_value']
     data_file_path = param['data']['all_memories_path']
-    stopwords = param['data']['stopwords']
+    stopwords_path = param['data']['stopwords_path']
+    preprocess = param['data']['preprocess']
     sentiment_threshold = param['data']['sentiment_threshold']
     sentiment_output_path = param['output']['sentiment_output_path']
     confusion_output_path = param['output']['confusion_output_path']
+
+    # Read the stopwords txt file
+    with open(stopwords_path, 'r') as file:
+        stopwords = file.read().splitlines()
 
     # Read the excel file for the data
     df = pd.read_excel(data_file_path)
     df_columns = df.columns.to_list()
     print(f'Data columns are :: \n{df_columns}')
+
+    # Preprocess the memory texts in the dataframe df
+    if preprocess:
+        memories_list = df['Memory_text'].to_list()
+        memories_list = preprocessing_pipeline(memories_list, stopwords)
+        df['Memory_text'] = memories_list
 
     # Ensures to get the repeated results
     # random.seed(seed_value)
