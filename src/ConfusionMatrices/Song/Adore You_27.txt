@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Song, cue value: Adore You, # memories: 27
+
+		 VADER 			 Textblob 
+Accuracy: 0.4074074074074074, 0.3333333333333333 
+Precision: [0.         0.         0.25       0.55555556 0.5       ], [0.         0.         0.14285714 0.71428571 0.66666667] 
+Recall: [0.         0.         0.4        0.41666667 0.4       ], [0.         0.         0.4        0.41666667 0.2       ] 
+F1: [0.         0.         0.30769231 0.47619048 0.44444444], [0.         0.         0.21052632 0.52631579 0.30769231]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.25      0.40      0.31         5
+           4       0.56      0.42      0.48        12
+           5       0.50      0.40      0.44        10
+
+   micro avg       0.41      0.41      0.41        27
+   macro avg       0.26      0.24      0.25        27
+weighted avg       0.48      0.41      0.43        27
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.14      0.40      0.21         5
+           4       0.71      0.42      0.53        12
+           5       0.67      0.20      0.31        10
+
+    accuracy                           0.33        27
+   macro avg       0.30      0.20      0.21        27
+weighted avg       0.59      0.33      0.39        27

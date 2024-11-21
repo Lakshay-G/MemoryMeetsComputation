@@ -1,0 +1,33 @@
+TextBlob Classification Report			-> Cue type: Singer, cue value: Bastille, # memories: 29
+
+		 VADER 			 Textblob 
+Accuracy: 0.3793103448275862, 0.4482758620689655 
+Precision: [0.         1.         0.57142857 0.18181818 0.44444444], [0.         1.         0.47058824 0.33333333 0.        ] 
+Recall: [0.         0.5        0.33333333 0.22222222 0.66666667], [0.         1.         0.66666667 0.33333333 0.        ] 
+F1: [0.         0.66666667 0.42105263 0.2        0.53333333], [0.         1.         0.55172414 0.33333333 0.        ]
+
+VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       1.00      0.50      0.67         2
+           3       0.57      0.33      0.42        12
+           4       0.18      0.22      0.20         9
+           5       0.44      0.67      0.53         6
+
+    accuracy                           0.38        29
+   macro avg       0.44      0.34      0.36        29
+weighted avg       0.45      0.38      0.39        29
+
+Textblob 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       1.00      1.00      1.00         2
+           3       0.47      0.67      0.55        12
+           4       0.33      0.33      0.33         9
+           5       0.00      0.00      0.00         6
+
+   micro avg       0.45      0.45      0.45        29
+   macro avg       0.36      0.40      0.38        29
+weighted avg       0.37      0.45      0.40        29
