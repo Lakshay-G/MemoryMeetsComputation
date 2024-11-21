@@ -1,96 +1,149 @@
-from nltk.corpus import wordnet
-from nltk.stem import WordNetLemmatizer
-from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk.corpus import stopwords
-import string
-import nltk
-import numpy as np
+import spacy
 import pandas as pd
-from wordcloud import STOPWORDS
+import numpy as np
+import json
+import time
+from collections import Counter
+import re
 
 
-def pre_process(memory_text: str):
+def lemmatizer(memory, model):
+    # convert the memory given to tokenized sentence
+    sentence = model(memory)
 
-    print(memory_text)
-    return
+    # extract lemmatized form of all the tokens in the sentence
+    # lemmata = [token.lemma_.lower() for token in sentence]
+    lemmata = ['sing' if token.text.lower() == 'singing' else token.lemma_.lower()
+               for token in sentence]  # tackling edge case since spacy model is lemmatizing 'singing' to 'singe' instead of 'sing'
 
+    # join the lemmatized tokens to get the final lemmatized sentence
+    final_sentence = ' '.join(lemmata)
 
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('wordnet')
-
-# Example text
-text_data = """
-Listened to the song when I was in 8th grade and watched the music video, a dog died in it and it was sad.
-"""
-
-# Define custom stopwords
-custom_stopwords = set([' '])
-print(custom_stopwords)
-
-# Combine default NLTK stopwords with custom stopwords
-# all_stopwords = set(stopwords.words('english')).union(custom_stopwords)
-# print(all_stopwords)
-
-all_stopwords = set(STOPWORDS)
-all_stopwords.update(custom_stopwords)
-print(all_stopwords)
+    return final_sentence
 
 
-# Initialize the lemmatizer
-lemmatizer = WordNetLemmatizer()
+def remove_stopwords(memory, stopwords):
 
-# Function to convert NLTK POS tags to WordNet POS tags
+    # Tokenize the memory (split into words)
+    words = memory.lower().split()
 
+    # Filter out stopwords
+    filtered_words = [word for word in words if word not in stopwords]
 
-def get_wordnet_pos(tag):
-    if tag.startswith('J'):
-        return wordnet.ADJ
-    elif tag.startswith('V'):
-        return wordnet.VERB
-    elif tag.startswith('N'):
-        return wordnet.NOUN
-    elif tag.startswith('R'):
-        return wordnet.ADV
-    else:
-        return wordnet.NOUN
+    # Reconstruct the cleaned text
+    cleaned_memory = ' '.join(filtered_words)
+
+    return cleaned_memory
 
 
-# Step 1: Remove sentences with less than 10 words
-sentences = sent_tokenize(text_data)
-filtered_sentences = [sentence for sentence in sentences if len(
-    word_tokenize(sentence)) >= 10]
+def find_custom_stopwords(memories_list):
 
-# Step 2: Remove stopwords (both default and custom) and punctuation
+    # combine all memories together to get custom stopwords
+    memories = ' '.join(memories_list)
+
+    # tokenize the combined memories
+    tokens = memories.split()
+
+    # count the frequency of each token and store it
+    token_counts = Counter(tokens)
+    frequencies = np.array(list(token_counts.values()))
+    # print('frequency: ', sorted(frequencies, reverse=True),
+    #       len(frequencies), np.sum(frequencies))
+    mean_freq = np.mean(frequencies)  # mean of the frequency of tokens
+    std_freq = np.std(frequencies)  # SD of the frequency of tokens
+
+    # threshold of computing the custom stopwords is set to MEAN + 4*SD
+    threshold = mean_freq + 4 * std_freq
+
+    custom_stopwords = {word for word, count in token_counts.items()
+                        if count > threshold}
+    # Output results
+    print(f"Token Frequencies (only showing Mean + 1 SD = {np.int32(mean_freq+std_freq)} tokens for now):",
+          token_counts.most_common(np.int32(mean_freq+std_freq)))
+    # print("Token Frequencies:", token_counts)
+    print("Mean Frequency:", mean_freq)
+    print("Standard Deviation:", std_freq)
+    print('Threshold Frequency (Mean + 4 SDs): ', threshold)
+    print("Custom Stopwords (4 SDs above mean):", custom_stopwords)
+
+    return custom_stopwords
 
 
-def remove_stopwords_and_punctuation(sentence):
-    words = word_tokenize(sentence)
-    words = [word for word in words if word.lower(
-    ) not in all_stopwords and word not in string.punctuation]
-    return words
+def remove_puncuation(memory):
+
+    # Regex pattern to match all punctuation marks
+    pattern = r"[^\w\s]"
+
+    # Remove all punctuation marks
+    memory_no_punctuation = re.sub(pattern, "", memory)
+
+    return memory_no_punctuation
 
 
-filtered_sentences = [' '.join(remove_stopwords_and_punctuation(
-    sentence)) for sentence in filtered_sentences]
+def preprocessing_pipeline(memories_list, stopwords):
 
-# Step 3: Lemmatize the words with POS tagging
+    model = spacy.load(f'en_core_web_lg')
+
+    print('\n\t\t >>>>>> STARTING PREPROCESSING STEPS <<<<<<\n\n')
+    start = time.time()
+
+    # 1. lemmatizing works good + lowering also done
+    print("Step 1:: Starting lemmatization!\n")
+    memories_list = [lemmatizer(memory, model) for memory in memories_list]
+
+    # 2. now check for stopwords and remove the one's from snowball stopwords list
+    print("Step 2:: Removing snowball stopwords (without negators and including 's token)!\n")
+    memories_list = [remove_stopwords(memory, stopwords)
+                     for memory in memories_list]
+
+    # 3. remove all the punctuation marks now
+    print("Step 3:: Removing punctuation marks!\n")
+    memories_list = [remove_puncuation(memory) for memory in memories_list]
+
+    # 4. now check for custom stopwords based on words occuring >3SDs away
+    print("Step 4:: Finding custom stopwords!")
+    custom_stopwords = find_custom_stopwords(memories_list)
+
+    # 5. remove the custom stopwords now
+    print("\nStep 5:: Removing custom stopwords now!\n")
+    memories_list = [remove_stopwords(memory, custom_stopwords)
+                     for memory in memories_list]
+
+    print('FINAL:: Total time taken for all the preprocessing: ', time.time()-start)
+
+    return memories_list
 
 
-def lemmatize_sentence(sentence):
-    words = word_tokenize(sentence)
-    pos_tags = nltk.pos_tag(words)
-    lemmatized_words = [lemmatizer.lemmatize(
-        word, get_wordnet_pos(tag)) for word, tag in pos_tags]
-    return ' '.join(lemmatized_words)
+if __name__ == '__main__':
+    # Open the parameter file to get necessary parameters
+    param_filename = 'src/params.json'
+    with open(param_filename) as paramfile:
+        param = json.load(paramfile)
 
+    # Load parameter values
+    seed_value = param['data']['seed_value']
+    data_file_path = param['data']['all_memories_path']
+    # custom_stopwords = param['data']['stopwords']
 
-lemmatized_sentences = [lemmatize_sentence(
-    sentence) for sentence in filtered_sentences]
+    # Path to the TXT file
+    file_path = 'asset/stopwords_en.txt'
 
-# Step 4: Convert to lower case
-final_sentences = [sentence.lower() for sentence in lemmatized_sentences]
+    # Read the TXT file
+    with open(file_path, 'r') as file:
+        stopwords = file.read().splitlines()
 
-# Display the preprocessed text
-preprocessed_text = ' '.join(final_sentences)
-print(preprocessed_text)
+    # Display the stopwords
+    # print(stopwords)
+
+    sentiment_threshold = param['data']['sentiment_threshold']
+    sentiment_output_path = param['output']['sentiment_output_path']
+    confusion_output_path = param['output']['confusion_output_path']
+
+    # Read the excel file for the data
+    df = pd.read_excel(data_file_path)
+    memories_list = df['Memory_text'].to_list()
+
+    memories_list = preprocessing_pipeline(memories_list, stopwords)
+    # print(df['Memory_text'].head())
+    df['Memory_text'] = memories_list
+    # print(df.head())

@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import json
 import numpy as np
+from preprocess import preprocessing_pipeline
 
 
 def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcount_output_path: str, cue_type=None, cue_val=None, sentiment=None):
@@ -62,7 +63,7 @@ def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcou
     plt.close()
 
 
-def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
+def wordCloudByCueType(cue_type: str, df: pd.DataFrame, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
     '''
     cue_type: [Song, Condition, Year, Singer] are the examples in the given work
     df: The entire data frame for a given dataset
@@ -87,12 +88,12 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
         # Combine all texts into a single string if needed
         all_memory_texts = ' '.join(memory_texts)
 
-        # Create a set of stop words and add custom stop words
+        '''# Create a set of stop words and add custom stop words
         custom_stopwords = set(STOPWORDS)
-        custom_stopwords.update(stopwords)
+        custom_stopwords.update(stopwords)'''
 
         wordcloud = WordCloud(width=800, height=400,
-                              background_color='white', stopwords=custom_stopwords, colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
+                              background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
 
         # Display the generated word cloud
         plt.figure(figsize=(10, 5))
@@ -115,7 +116,7 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, stopwords: list, seed_va
     return wordcloud
 
 
-def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
+def wordCloudOverall(df: pd.DataFrame, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
     '''
     df: The entire data frame for a given dataset
     stopwords: particular words we don't need to be included in the word cloud
@@ -131,12 +132,12 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
     # Combine all texts into a single string if needed
     all_memory_texts = ' '.join(memory_texts)
 
-    # Create a set of stop words and add custom stop words
+    '''# Create a set of stop words and add custom stop words
     custom_stopwords = set(STOPWORDS)
-    custom_stopwords.update(stopwords)
+    custom_stopwords.update(stopwords)'''
 
     wordcloud = WordCloud(width=800, height=400,
-                          background_color='white', stopwords=custom_stopwords, colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
+                          background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
 
     # Display the generated word cloud
     plt.figure(figsize=(10, 5))
@@ -158,7 +159,7 @@ def wordCloudOverall(df: pd.DataFrame, stopwords: list, seed_value: int, wordclo
     return wordcloud
 
 
-def wordCloudSentiments(df: pd.DataFrame, stopwords: list, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
+def wordCloudSentiments(df: pd.DataFrame, seed_value: int, wordcloud_output_path: str, wordcount_output_path: str):
     '''
     df: The entire data frame for a given dataset
     stopwords: particular words we don't need to be included in the word cloud
@@ -178,17 +179,19 @@ def wordCloudSentiments(df: pd.DataFrame, stopwords: list, seed_value: int, word
         # Extract the 'Memory_text' column
         # Drop NaN values and convert to a list
         memory_texts = df_positive['Memory_text'].dropna().tolist()
+        # print(memory_texts, len(memory_texts))
+        # exit()
         cnt = len(memory_texts)
 
         # Combine all texts into a single string if needed
         all_memory_texts = ' '.join(memory_texts)
 
-        # Create a set of stop words and add custom stop words
+        '''# Create a set of stop words and add custom stop words
         custom_stopwords = set(STOPWORDS)
-        custom_stopwords.update(stopwords)
+        custom_stopwords.update(stopwords)'''
 
         wordcloud = WordCloud(width=800, height=400,
-                              background_color='white', stopwords=custom_stopwords, colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
+                              background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
 
         # Display the generated word cloud
         plt.figure(figsize=(10, 5))
@@ -218,24 +221,35 @@ if __name__ == '__main__':
     # Load parameter values
     seed_value = param['data']['seed_value']
     data_file_path = param['data']['all_memories_path']
-    stopwords = param['data']['stopwords']
+    stopwords_path = param['data']['stopwords_path']
+    preprocess = param['data']['preprocess']
     wordcloud_output_path = param['output']['wordcloud_output_path']
     wordcount_output_path = param['output']['wordcount_output_path']
+
+    # Read the stopwords txt file
+    with open(stopwords_path, 'r') as file:
+        stopwords = file.read().splitlines()
 
     # Read the excel file for the data
     df = pd.read_excel(data_file_path)
     df_columns = df.columns.to_list()
     print(f'Data columns are :: \n{df_columns}')
 
+    # Preprocess the memory texts in the dataframe df
+    if preprocess:
+        memories_list = df['Memory_text'].to_list()
+        memories_list = preprocessing_pipeline(memories_list, stopwords)
+        df['Memory_text'] = memories_list
+
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
         # for cue_type in ['Year']:
-        wordCloudByCueType(cue_type=cue_type, df=df, stopwords=stopwords, seed_value=seed_value,
+        wordCloudByCueType(cue_type=cue_type, df=df, seed_value=seed_value,
                            wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
 
-    wordCloudOverall(df=df, stopwords=stopwords, seed_value=seed_value,
+    wordCloudOverall(df=df, seed_value=seed_value,
                      wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
 
-    wordCloudSentiments(df=df, stopwords=stopwords, seed_value=seed_value,
+    wordCloudSentiments(df=df, seed_value=seed_value,
                         wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
