@@ -1,12 +1,25 @@
 TextBlob Classification Report			-> Cue type: Singer, cue value: Maren Morris, # memories: 9
 
 		 VADER 			 Textblob 
-Accuracy: 0.3333333333333333, 0.4444444444444444 
-Precision: [0.  0.  0.6 0.  0. ], [0.   0.   0.6  0.25 0.  ] 
-Recall: [0.  0.  0.5 0.  0. ], [0.  0.  0.5 1.  0. ] 
-F1: [0.         0.         0.54545455 0.         0.        ], [0.         0.         0.54545455 0.4        0.        ]
+Accuracy: 0.2222222222222222, 0.3333333333333333 
+Precision: [0.  0.  0.5 0.  0. ], [0.  0.  0.6 0.  0. ] 
+Recall: [0.         0.         0.33333333 0.         0.        ], [0.  0.  0.5 0.  0. ] 
+F1: [0.  0.  0.4 0.  0. ], [0.         0.         0.54545455 0.         0.        ]
 
 VADER 	
+              precision    recall  f1-score   support
+
+           1       0.00      0.00      0.00         0
+           2       0.00      0.00      0.00         0
+           3       0.50      0.33      0.40         6
+           4       0.00      0.00      0.00         1
+           5       0.00      0.00      0.00         2
+
+   micro avg       0.22      0.22      0.22         9
+   macro avg       0.10      0.07      0.08         9
+weighted avg       0.33      0.22      0.27         9
+
+Textblob 	
               precision    recall  f1-score   support
 
            1       0.00      0.00      0.00         0
@@ -18,16 +31,3 @@ VADER
    micro avg       0.33      0.33      0.33         9
    macro avg       0.12      0.10      0.11         9
 weighted avg       0.40      0.33      0.36         9
-
-Textblob 	
-              precision    recall  f1-score   support
-
-           1       0.00      0.00      0.00         0
-           2       0.00      0.00      0.00         0
-           3       0.60      0.50      0.55         6
-           4       0.25      1.00      0.40         1
-           5       0.00      0.00      0.00         2
-
-   micro avg       0.44      0.44      0.44         9
-   macro avg       0.17      0.30      0.19         9
-weighted avg       0.43      0.44      0.41         9
