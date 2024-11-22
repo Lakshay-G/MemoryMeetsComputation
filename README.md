@@ -28,7 +28,7 @@ This repository consists of all the code required by the paper []. This paper pr
 
 ## Usage
 
-2. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
+1. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
 
    - Download [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) document and keep in `assets` folder.
 
@@ -38,7 +38,7 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - Also, this stopwords list doesn't contain the token `'s` which is usually present in other stopwords list. Hence, we add `'s` token to the stopwords list as well.
 
-3. The parameters needed for the code globally are saved in `params.json`.
+2. The parameters needed for the code globally are saved in `params.json`.
 
    - `"data"`: contains parameters needed for extracting values
 
@@ -54,4 +54,4 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
 
-4. Code for the entire preprocessing pipeline is `src/preprocess.py` script. <<NEED TO ADD PREPROCESSING STEPS>>
+3. Code for the entire preprocessing pipeline is `src/preprocess.py` script. [[NEED TO ADD PREPROCESSING STEPS]]
