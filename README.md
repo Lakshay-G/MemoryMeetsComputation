@@ -14,7 +14,21 @@ This repository consists of all the code required by the paper []. This paper pr
 
 ## Usage
 
-1. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
+1. Repository sitemap:
+
+   - **asset/**: Contains datasets to be analyzed and stopwords list
+   - **output/**: Contains all the generated output files
+   - **src/**: Main code files for analysis and output generation
+     - `archive/`: Contains old code used during testing
+     - `preprocess.py`: Contains complete preprocessing pipeline used before analysis
+     - `sentiment_analysis.py`: Contains code for sentiment analysis as a form of histograms and confusion matrices
+     - `snowball_stopwords_extract.R`: Contains code to extract the stopwords list
+     - `word_cloud.py`: Contains code for word clouds and top 10 word counts plots
+   - `LICENSE`: Licence for the project
+   - `README.md`: Documentation for the project
+   - `requirements.txt`: Python dependencies
+
+2. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
 
    - Download [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) document and keep in `assets` folder.
 
@@ -24,7 +38,7 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - Also, this stopwords list doesn't contain the token `'s` which is usually present in other stopwords list. Hence, we add `'s` token to the stopwords list as well.
 
-2. The parameters needed for the code globally are saved in `params.json`.
+3. The parameters needed for the code globally are saved in `params.json`.
 
    - `"data"`: contains parameters needed for extracting values
 
@@ -40,4 +54,4 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
 
-3. All of the preprocessing pipeline is
+4. Code for the entire preprocessing pipeline is `src/preprocess.py` script. <<NEED TO ADD PREPROCESSING STEPS>>
