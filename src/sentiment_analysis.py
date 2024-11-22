@@ -627,6 +627,6 @@ if __name__ == '__main__':
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method='cm')
+                           sentiment_output_path=sentiment_output_path, method='hist')
     sentimentOverall(
-        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='cm')
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')
