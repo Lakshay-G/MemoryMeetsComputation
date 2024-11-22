@@ -12,6 +12,20 @@ This repository consists of all the code required by the paper []. This paper pr
    `pip install -r requirements.txt`
 3. Download **snowball stopwords list** from [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda)
 
+## Repository Sitemap
+
+1. [asset/](asset/): Datasets needed to be analyzed and stopwords list
+2. [output/](output/): All the generated output files
+3. [src/](src/): Main code files for analysis and output generation
+   - [archive/](src/archive/): Contains old code used during testing
+   - [preprocess.py](src/preprocess.py): Contains complete preprocessing pipeline used before analysis
+   - [sentiment_analysis.py](src/sentiment_analysis.py): Contains code for sentiment analysis as a form of histograms and confusion matrices
+   - [snowball_stopwords_extract.R](src/snowball_stopwords_extract.R): Contains _R_ code to extract the stopwords list
+   - [word_cloud.py](src/word_cloud.py): Contains code for word clouds and top 10 word counts plots
+4. [LICENSE](LICENSE): Licence for the project
+5. [README.md](README.md): Documentation for the project
+6. [requirements.txt](requirements.txt): Python dependencies
+
 ## Usage
 
 1. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
@@ -37,3 +51,7 @@ This repository consists of all the code required by the paper []. This paper pr
      - `"preprocess"`: contains `true` if preprocessing needs to be done before analysis, else `false`
 
      - `"sentiment_type"`: contains `"hist"` if sentiment analysis graphs need to be produced, else `"cm"` if sentiment analysis metrics and confusion matrices need to be produced
+
+   - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
+
+3. Code for the entire preprocessing pipeline is `src/preprocess.py` script. [[NEED TO ADD PREPROCESSING STEPS]]
