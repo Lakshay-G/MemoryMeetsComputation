@@ -2,7 +2,7 @@
 
 This repository consists of all the code required by the paper []. This paper provides a compehensive study for sentiment analysis for psychology data. Currently we are comparing existing methods of [VADER](https://github.com/cjhutto/vaderSentiment) and [TextBlob](https://github.com/sloria/TextBlob) for two different datasets. Briefly, we're doing 4 things: (a) sentiment analysis (b) metrics for the sentiment analysis (c) wordcloud generation (d) top word counts; in this code.
 
-<detail>
+<details>
 <summary>Table of Contents</summary>
 
 1. [Getting Started](#getting-started)
@@ -10,7 +10,7 @@ This repository consists of all the code required by the paper []. This paper pr
 3. [Repository Sitemap](#repository-sitemap)
 4. [Usage](#usage)
 
-</detail>
+</details>
 
 ## Getting Started
 
