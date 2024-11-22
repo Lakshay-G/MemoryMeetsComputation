@@ -1,5 +1,5 @@
 # Importing necessary libraries
-from wordcloud import WordCloud, STOPWORDS
+from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 import pandas as pd
 import json
@@ -88,10 +88,6 @@ def wordCloudByCueType(cue_type: str, df: pd.DataFrame, seed_value: int, wordclo
         # Combine all texts into a single string if needed
         all_memory_texts = ' '.join(memory_texts)
 
-        '''# Create a set of stop words and add custom stop words
-        custom_stopwords = set(STOPWORDS)
-        custom_stopwords.update(stopwords)'''
-
         wordcloud = WordCloud(width=800, height=400,
                               background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
 
@@ -131,10 +127,6 @@ def wordCloudOverall(df: pd.DataFrame, seed_value: int, wordcloud_output_path: s
 
     # Combine all texts into a single string if needed
     all_memory_texts = ' '.join(memory_texts)
-
-    '''# Create a set of stop words and add custom stop words
-    custom_stopwords = set(STOPWORDS)
-    custom_stopwords.update(stopwords)'''
 
     wordcloud = WordCloud(width=800, height=400,
                           background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
@@ -185,10 +177,6 @@ def wordCloudSentiments(df: pd.DataFrame, seed_value: int, wordcloud_output_path
 
         # Combine all texts into a single string if needed
         all_memory_texts = ' '.join(memory_texts)
-
-        '''# Create a set of stop words and add custom stop words
-        custom_stopwords = set(STOPWORDS)
-        custom_stopwords.update(stopwords)'''
 
         wordcloud = WordCloud(width=800, height=400,
                               background_color='white', colormap='viridis', collocations=False, random_state=seed_value).generate(all_memory_texts)
