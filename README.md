@@ -6,14 +6,13 @@ This repository consists of all the code required by the paper []. This paper pr
 
 ## Installation
 
-    1. Clone this repository using
-    `git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git`
-    2. Install the required Python libraries using
-    `pip install -r requirements.txt`
-    3. Download **snowball stopwords list** from [Link Text] (https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda)
+1. Clone this repository using
+   `git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git`
+2. Install the required Python libraries using
+   `pip install -r requirements.txt`
+3. Download **snowball stopwords list** from [Link Text] (https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda)
 
 ## Usage
 
-    1. Since [Link Text] (https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an *R* object, we need to extract the stopwords list for using it in *Python*.
-        -
-    2.
+1. Since [Link Text] (https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
+2.
