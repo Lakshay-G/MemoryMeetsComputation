@@ -8,6 +8,7 @@ import numpy as np
 import random
 from sklearn import metrics
 from preprocess import preprocessing_pipeline
+import os
 
 
 def vader_score(text: str):
@@ -488,7 +489,7 @@ def polarity_score(score: float, sentiment_threshold: float, vis=1):
             return 0
 
 
-def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str, method: str):
+def sentimentByCueType(cue_type: str, df: pd.DataFrame, sentiment_output_path: str, confusion_output_path: str, method: str):
     '''
     cue_type: [Song, Condition, Year, Singer] are the examples in the given work
     df: The entire data frame for a given dataset
@@ -586,6 +587,12 @@ def sentimentOverall(df: pd.DataFrame, sentiment_output_path: str, confusion_out
                          selfvalence_scores=selfvalence_scores, cnt=cnt, confusion_output_path=confusion_output_path)
 
 
+def check_create_folders(path):
+    # Check if output folders exist or not, if not then create the folders
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+
 if __name__ == '__main__':
 
     # Open the parameter file to get necessary parameters
@@ -602,6 +609,10 @@ if __name__ == '__main__':
     sentiment_type = param['data']['sentiment_type']
     sentiment_output_path = param['output']['sentiment_output_path']
     confusion_output_path = param['output']['confusion_output_path']
+
+    # Check if output folders exist or not, if not then create the folders
+    check_create_folders(sentiment_output_path)
+    check_create_folders(confusion_output_path)
 
     # Read the stopwords txt file
     with open(stopwords_path, 'r') as file:
@@ -625,9 +636,12 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+        # Check if output folders exist or not, if not then create the folders
+        check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
+        check_create_folders(path=f"{confusion_output_path}/{cue_type}")
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method=sentiment_type)
+                           sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
     sentimentOverall(
         df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)

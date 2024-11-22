@@ -37,3 +37,7 @@ This repository consists of all the code required by the paper []. This paper pr
      - `"preprocess"`: contains `true` if preprocessing needs to be done before analysis, else `false`
 
      - `"sentiment_type"`: contains `"hist"` if sentiment analysis graphs need to be produced, else `"cm"` if sentiment analysis metrics and confusion matrices need to be produced
+
+   - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
+
+3. All of the preprocessing pipeline is

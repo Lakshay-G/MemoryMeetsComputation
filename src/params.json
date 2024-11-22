@@ -5,12 +5,12 @@
         "stopwords_path": "asset/stopwords_en.txt",
         "sentiment_threshold": 0.01,
         "preprocess": true,
-        "sentiment_type": "cm"
+        "sentiment_type": "hist"
     },
     "output": {
-        "wordcloud_output_path": "src/WordClouds",
-        "wordcount_output_path": "src/TopWordCounts",
-        "sentiment_output_path": "src/SentimentAnalysis",
-        "confusion_output_path": "src/ConfusionMatrices"
+        "wordcloud_output_path": "output/WordClouds",
+        "wordcount_output_path": "output/TopWordCounts",
+        "sentiment_output_path": "output/SentimentAnalysis",
+        "confusion_output_path": "output/ConfusionMatrices"
     }
 }

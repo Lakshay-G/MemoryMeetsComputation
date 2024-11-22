@@ -5,6 +5,7 @@ import pandas as pd
 import json
 import numpy as np
 from preprocess import preprocessing_pipeline
+from sentiment_analysis import check_create_folders
 
 
 def wordCountPlot(wordcloud: WordCloud, all_memory_texts: str, cnt: int, wordcount_output_path: str, cue_type=None, cue_val=None, sentiment=None):
@@ -214,6 +215,10 @@ if __name__ == '__main__':
     wordcloud_output_path = param['output']['wordcloud_output_path']
     wordcount_output_path = param['output']['wordcount_output_path']
 
+    # Check if output folders exist or not, if not then create the folders
+    check_create_folders(wordcloud_output_path)
+    check_create_folders(wordcount_output_path)
+
     # Read the stopwords txt file
     with open(stopwords_path, 'r') as file:
         stopwords = file.read().splitlines()
@@ -232,6 +237,10 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+        # Check if output folders exist or not, if not then create the folders
+        check_create_folders(path=f"{wordcloud_output_path}/{cue_type}")
+        check_create_folders(path=f"{wordcount_output_path}/{cue_type}")
+
         # for cue_type in ['Year']:
         wordCloudByCueType(cue_type=cue_type, df=df, seed_value=seed_value,
                            wordcloud_output_path=wordcloud_output_path, wordcount_output_path=wordcount_output_path)
