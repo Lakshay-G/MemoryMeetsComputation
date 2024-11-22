@@ -599,6 +599,7 @@ if __name__ == '__main__':
     stopwords_path = param['data']['stopwords_path']
     preprocess = param['data']['preprocess']
     sentiment_threshold = param['data']['sentiment_threshold']
+    sentiment_type = param['data']['sentiment_type']
     sentiment_output_path = param['output']['sentiment_output_path']
     confusion_output_path = param['output']['confusion_output_path']
 
@@ -627,6 +628,6 @@ if __name__ == '__main__':
         # for cue_type in ['Year']:
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, method='hist')
+                           sentiment_output_path=sentiment_output_path, method=sentiment_type)
     sentimentOverall(
-        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method='hist')
+        df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
