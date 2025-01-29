@@ -9,6 +9,7 @@ import random
 from sklearn import metrics
 from preprocess import preprocessing_pipeline
 import os
+import matplotlib.ticker as mticker
 
 
 def vader_score(text: str):
@@ -204,7 +205,7 @@ def sentiment_histogram_vis2(vader_scores: list, textblob_scores: list, selfvale
 
     # Adding titles and labels
     ax.set_xlabel('Valence scores')
-    ax.set_ylabel('Probability')
+    ax.set_ylabel('Proportion of Classification')
 
     # Set x-ticks to bin values
     ax.set_xticks(bins[:-1])
@@ -241,6 +242,9 @@ def sentiment_histogram_vis1(vader_scores: list, textblob_scores: list, selfvale
     '''
     # bins = np.arange(-1, 3)
 
+    display_labels = ["Very\nNegative", "Somewhat\nNegative",
+                      "Neutral", "Somewhat\nPositive", "Very\nPositive"]
+
     # print(selfvalence_scores)
     bins = np.arange(0.5, 6.5, step=1)
     # print(bins)
@@ -254,9 +258,9 @@ def sentiment_histogram_vis1(vader_scores: list, textblob_scores: list, selfvale
     # print(hist_selfvalence)
 
     # Normalize histograms to get probabilities
-    hist_vader_prob = hist_vader / sum(hist_vader)
-    hist_textblob_prob = hist_textblob / sum(hist_textblob)
-    hist_selfvalence_prob = hist_selfvalence / sum(hist_selfvalence)
+    hist_vader_prob = (hist_vader / sum(hist_vader))*100
+    hist_textblob_prob = (hist_textblob / sum(hist_textblob))*100
+    hist_selfvalence_prob = (hist_selfvalence / sum(hist_selfvalence))*100
 
     # Setting the width of each bar
     width = 0.5
@@ -268,32 +272,34 @@ def sentiment_histogram_vis1(vader_scores: list, textblob_scores: list, selfvale
     bins = np.arange(1, 6.5, step=1)
     # print(bins)
     ax.bar(bins[:-1], hist_selfvalence_prob, width=width,
-           label='Self valence (truth)', alpha=0.5, linewidth=1, color='grey', edgecolor='darkgrey')
+           label='Self-Reported Valence', alpha=0.5, linewidth=1, color='grey', edgecolor='darkgrey')
 
     ax.bar(bins[:-1] - width/4, hist_vader_prob, width=width/2,
-           label='VADER analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='blue')
+           label='VADER', alpha=0.75, linewidth=1.5, fill=False, edgecolor='blue')
     ax.bar(bins[:-1] + width/4, hist_textblob_prob, width=width/2,
-           label='TextBlob analysis', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
+           label='TextBlob', alpha=0.75, linewidth=1.5, fill=False, edgecolor='red')
 
     # Adding titles and labels
     ax.set_xlabel('Valence scores')
-    ax.set_ylabel('Probability')
+    ax.set_ylabel('Proportion of Classification')
 
     # Set x-ticks to bin values
     ax.set_xticks(bins[:-1])
     ax.set_xticklabels([f'{round(b, 1)}' for b in bins[:-1]])
+    ax.set_xticklabels(display_labels, ha="center")
+    ax.yaxis.set_major_formatter(mticker.PercentFormatter())
     ax.legend()
     plt.xlim(0.5, 5.5)
 
     # Saving the plot
     if cue_type != None:
-        plt.title(
-            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
+        # plt.title(
+        #     f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
             f'{sentiment_output_path}/{cue_type}/{cue_val}_{cnt}_vis1.png', format='PNG')
     else:
-        plt.title(f'All Memories, # memories: {cnt}')
+        # plt.title(f'All Memories, # memories: {cnt}')
         plt.tight_layout()
         plt.savefig(
             f'{sentiment_output_path}/All_Memories_{cnt}_vis1.png', format='PNG')
@@ -332,7 +338,7 @@ def sentiment_histogram_vis3(vader_scores: list, textblob_scores: list, cnt: int
 
     # Adding titles and labels
     ax.set_xlabel('Valence scores')
-    ax.set_ylabel('Probability')
+    ax.set_ylabel('Proportion of Classification')
     ax.legend()
     plt.xlim(-1.5, 1.5)
 
@@ -358,6 +364,8 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
 
     # print(vader_scores, textblob_scores, selfvalence_scores)
     labels = [1, 2, 3, 4, 5]
+    display_labels = ["Very\nNegative", "Somewhat\nNegative",
+                      "Neutral", "Somewhat\nPositive", "Very\nPositive"]
 
     # Check the unique values of the true and predicted (VADER, Textblob) values.
     '''    
@@ -383,30 +391,45 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
         np.array(selfvalence_scores), np.array(textblob_scores), labels=labels)
 
     # Create subplots
-    fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+    fig, ax = plt.subplots(2, 1, figsize=(6, 12))
     display_vader = metrics.ConfusionMatrixDisplay(
-        confusion_matrix=cm_vader, display_labels=labels)
+        confusion_matrix=cm_vader, display_labels=display_labels)
     display_textblob = metrics.ConfusionMatrixDisplay(
-        confusion_matrix=cm_textblob, display_labels=labels)
+        confusion_matrix=cm_textblob, display_labels=display_labels)
 
-    display_vader.plot(cmap='Blues', ax=ax[0], values_format='d')
-    display_textblob.plot(cmap='Blues', ax=ax[1], values_format='d')
+    p1 = display_vader.plot(cmap='Blues', ax=ax[0], values_format='d')
+    p2 = display_textblob.plot(cmap='Blues', ax=ax[1], values_format='d')
 
-    ax[0].set_title('VADER Confusion Matrix')
+    # p1.im_.colorbar.set_label("Narrative Count")
+    # p2.im_.colorbar.set_label("Narrative Count")
+
+    # Move color bar label to the top
+    for disp in [p1, p2]:  # Iterate through both confusion matrices
+        cbar = disp.im_.colorbar  # Get color bar
+        cbar.ax.set_ylabel("")  # Remove the side label
+        # Move label to the top
+        cbar.ax.set_xlabel("Narrative\nCount")
+        cbar.ax.xaxis.set_label_position('top')  # Set label position to top
+
+    ax[0].set_title('Confusion Matrix')
     ax[0].set_xlabel('VADER labels')
-    ax[0].set_ylabel('Self valence labels')
-    ax[1].set_title('TextBlob Confusion Matrix')
+    ax[0].set_ylabel('Self-Reported labels')
+    ax[1].set_title('Confusion Matrix')
     ax[1].set_xlabel('TextBlob labels')
-    ax[1].set_ylabel('Self valence labels')
+    ax[1].set_ylabel('Self-Reported labels')
+    # ax[0].set_xticklabels(display_labels, va="center", ha="center")
+    # ax[1].set_xticklabels(display_labels, va="center", ha="center")
+    # ax[0].set_yticklabels(display_labels, va="center", ha="center")
+    # ax[1].set_yticklabels(display_labels, va="center", ha="center")
 
     if cue_type != None:
-        plt.suptitle(
-            f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}', fontsize=16)
+        # plt.suptitle(
+        #     f'Cue type: {cue_type}, cue value: {cue_val}, # memories: {cnt}', fontsize=16)
         fig.tight_layout()
         plt.savefig(
             f'{confusion_output_path}/{cue_type}/{cue_val}_{cnt}.png', format='PNG')
     else:
-        plt.suptitle(f'All Memories, # memories: {cnt}', fontsize=16)
+        # plt.suptitle(f'All Memories, # memories: {cnt}', fontsize=16)
         fig.tight_layout()
         plt.savefig(
             f'{confusion_output_path}/All_Memories_{cnt}.png', format='PNG')
@@ -635,6 +658,7 @@ if __name__ == '__main__':
 
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
+
     for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
         # Check if output folders exist or not, if not then create the folders
         check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
@@ -643,5 +667,6 @@ if __name__ == '__main__':
         print(cue_type)
         sentimentByCueType(cue_type=cue_type, df=df,
                            sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
+
     sentimentOverall(
         df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
