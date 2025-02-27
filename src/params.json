@@ -1,7 +1,7 @@
 {
     "data": {
         "seed_value": 20867263,
-        "all_memories_path": "asset/Preprocessing_updated_wordcount_criteria_with_metadata.xlsx",
+        "all_memories_path": "asset/MEAM_dataset_20250201.xlsx",
         "stopwords_path": "asset/stopwords_en.txt",
         "sentiment_threshold": 0.01,
         "preprocess": true,
