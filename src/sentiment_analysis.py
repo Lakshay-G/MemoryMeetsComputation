@@ -493,13 +493,13 @@ def confusion_matrix(vader_scores: list, textblob_scores: list, selfvalence_scor
 
 def polarity_score(score: float, sentiment_threshold: float, vis=1):
     if vis != 3:
-        if score >= 0.6:
+        if score > 0.6:
             return 5
-        elif score >= 0.2:
+        elif score > 0.2:
             return 4
-        elif score > -0.2:
+        elif score >= -0.2:
             return 3
-        elif score > -0.6:
+        elif score >= -0.6:
             return 2
         elif score >= -1.0:
             return 1
@@ -618,6 +618,8 @@ def check_create_folders(path):
 
 if __name__ == '__main__':
 
+    np.random.seed(1234)
+
     # Open the parameter file to get necessary parameters
     param_filename = 'src/params.json'
     with open(param_filename) as paramfile:
@@ -646,6 +648,10 @@ if __name__ == '__main__':
     df_columns = df.columns.to_list()
     print(f'Data columns are :: \n{df_columns}')
 
+    # df['Memory_text'] = df['r_mem_s_4_text']
+    # df['Valence'] = df['r_mem_s_13_valence']
+    # df['Valence'] = df['Valence'].replace({-2: 1, -1: 2, 0: 3, 1: 4, 2: 5})
+
     # Preprocess the memory texts in the dataframe df
     if preprocess:
         memories_list = df['Memory_text'].to_list()
@@ -659,14 +665,14 @@ if __name__ == '__main__':
     # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
     # cue_type = 'Singer'
 
-    for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-        # Check if output folders exist or not, if not then create the folders
-        check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
-        check_create_folders(path=f"{confusion_output_path}/{cue_type}")
-        # for cue_type in ['Year']:
-        print(cue_type)
-        sentimentByCueType(cue_type=cue_type, df=df,
-                           sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
+    # for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+    #     # Check if output folders exist or not, if not then create the folders
+    #     check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
+    #     check_create_folders(path=f"{confusion_output_path}/{cue_type}")
+    #     # for cue_type in ['Year']:
+    #     print(cue_type)
+    #     sentimentByCueType(cue_type=cue_type, df=df,
+    #                        sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
 
     sentimentOverall(
         df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)

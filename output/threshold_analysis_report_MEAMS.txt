@@ -1,0 +1,12 @@
+
+        Threshold Analysis and MCC results for MEAMS Report
+:
+        Best 3-Class Thresholds - VADER: Positive: 0.21, Negative: -0.38
+        Best 3-Class Thresholds - TextBlob: Positive: 0.08, Negative: -0.0
+        Best 5-Class Thresholds - Vader: Lowerbound: 0.19, Upperbound: 0.62
+        Best 5-Class Thresholds - TextBlob: Lowerbound: 0.12, Upperbound: 0.24
+        MCC of Best 3-Class Thresholds - VADER: 0.14829617894966218
+        MCC of Best 3-Class Thresholds - TextBlob: 0.07603033688728376
+        MCC of Best 5-Class Thresholds - VADER: 0.10524135843663868
+        MCC of Best 5-Class Thresholds - TextBlob: 0.05590783287836516
+        

@@ -1,0 +1,44 @@
+Ablation MCC results for rIAMS Report
+
+    Calculating Average MCC for 100% subset size: 2484, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.15214649745710898
+    Average 3-Class MCC - Vader: 0.3203383695298883
+    Average 5-Class MCC - TextBlob: 0.06921546287257542
+    Average 5-Class MCC - Vader: 0.16630820690100515
+
+    
+    Calculating Average MCC for 75% subset size: 1800, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.15730391252749237
+    Average 3-Class MCC - Vader: 0.32416555000652736
+    Average 5-Class MCC - TextBlob: 0.07122282917198101
+    Average 5-Class MCC - Vader: 0.16930478080737782
+
+    
+    Calculating Average MCC for 50% subset size: 1200, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.1563374275963226
+    Average 3-Class MCC - Vader: 0.3222839191178615
+    Average 5-Class MCC - TextBlob: 0.0705238911577108
+    Average 5-Class MCC - Vader: 0.17171288097652312
+
+    
+    Calculating Average MCC for 33% subset size: 825, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.1567640845969699
+    Average 3-Class MCC - Vader: 0.32180308785102396
+    Average 5-Class MCC - TextBlob: 0.06962328255913616
+    Average 5-Class MCC - Vader: 0.17312610857694297
+
+    
+    Calculating Average MCC for 20% subset size: 500, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.15285791710610191
+    Average 3-Class MCC - Vader: 0.31996458826239843
+    Average 5-Class MCC - TextBlob: 0.07354682557967356
+    Average 5-Class MCC - Vader: 0.17210793012487116
+
+    
+    Calculating Average MCC for 10% subset size: 250, for samples: 50
+    Average 3-Class MCC - TextBlob: 0.15886205474938564
+    Average 3-Class MCC - Vader: 0.3147376443189255
+    Average 5-Class MCC - TextBlob: 0.07106193494653888
+    Average 5-Class MCC - Vader: 0.172369950121528
+
+    
