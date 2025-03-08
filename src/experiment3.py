@@ -27,31 +27,36 @@ def sentimentScores(df: pd.DataFrame, sentiment_threshold: float):
     # Drop NaN values and convert to a list
     # cnt = len(memory_texts)
     memory_texts = df['Memory_text'].dropna().tolist()
-    selfvalence_scores = df['Valence'].dropna().tolist()
+    selfvalence_scores_5 = df['Valence'].dropna().tolist()
 
     # self valence scores in 3-class classification
-    selfvalence_scores_vis3 = [-1 if x in [1, 2]
-                               else 0 if x == 3 else 1 for x in selfvalence_scores]
+    selfvalence_scores_3 = [-1 if x in [1, 2]
+                            else 0 if x == 3 else 1 for x in selfvalence_scores_5]
 
     cnt = len(memory_texts)
 
-    vader_scores = []
-    textblob_scores = []
-    vader_scores_vis3 = []
-    textblob_scores_vis3 = []
+    vader_scores_5 = []
+    textblob_scores_5 = []
+    vader_scores_3 = []
+    textblob_scores_3 = []
+    vader_scores_raw = []
+    textblob_scores_raw = []
 
     for memory in memory_texts:
         _, _, _, vader = vader_score(memory)
         txtblob, _ = textblob_score(memory)
-        vader_scores.append(polarity_score(vader, sentiment_threshold, vis=1))
-        textblob_scores.append(polarity_score(
+        vader_scores_5.append(polarity_score(
+            vader, sentiment_threshold, vis=1))
+        textblob_scores_5.append(polarity_score(
             txtblob, sentiment_threshold, vis=1))
-        vader_scores_vis3.append(polarity_score(
+        vader_scores_3.append(polarity_score(
             vader, sentiment_threshold, vis=3))
-        textblob_scores_vis3.append(polarity_score(
+        textblob_scores_3.append(polarity_score(
             txtblob, sentiment_threshold, vis=3))
+        vader_scores_raw.append(vader)
+        textblob_scores_raw.append(txtblob)
 
-    return vader_scores, textblob_scores, vader_scores_vis3, textblob_scores_vis3, selfvalence_scores, selfvalence_scores_vis3
+    return vader_scores_5, textblob_scores_5, vader_scores_3, textblob_scores_3, selfvalence_scores_5, selfvalence_scores_3, vader_scores_raw, textblob_scores_raw
 
 
 def mcc_scores(vader_scores, textblob_scores, vader_scores_vis3, textblob_scores_vis3, selfvalence_scores, selfvalence_scores_vis3):
@@ -107,7 +112,7 @@ def averageMCCs(df: pd.DataFrame, size: int, samples: int, percentage: int = Non
     return out
 
 
-def write_report(out: pd.DataFrame, size: int, samples: int, percentage: int = None):
+def write_ablation_report(out: pd.DataFrame, size: int, samples: int, percentage: int = None):
     text = f'''
     Calculating Average MCC for {percentage}% subset size: {size}, for samples: {samples}
     Average 3-Class MCC - TextBlob: {np.mean(out["TextBlobMCCs_3c"])}
@@ -119,7 +124,7 @@ def write_report(out: pd.DataFrame, size: int, samples: int, percentage: int = N
     return text
 
 
-def save_report_plot(df: pd.DataFrame, datatype: str, out100: pd.DataFrame, samples: int = 50):
+def save_ablation_report_plot(df: pd.DataFrame, datatype: str, out100: pd.DataFrame, samples: int = 50):
     '''
     It saves all the plots and the reports in a text file
     '''
@@ -180,21 +185,186 @@ def save_report_plot(df: pd.DataFrame, datatype: str, out100: pd.DataFrame, samp
         f.write(
             f'Ablation MCC results for {datatype} Report\n')
         if datatype != 'rIAMS':
-            f.write(write_report(out100, 825, samples, 100))
-            f.write(write_report(out75, 615, samples, 75))
-            f.write(write_report(out50, 410, samples, 50))
-            f.write(write_report(out33, 275, samples, 33))
-            f.write(write_report(out20, 160, samples, 20))
-            f.write(write_report(out10, 82, samples, 10))
+            f.write(write_ablation_report(out100, 825, samples, 100))
+            f.write(write_ablation_report(out75, 615, samples, 75))
+            f.write(write_ablation_report(out50, 410, samples, 50))
+            f.write(write_ablation_report(out33, 275, samples, 33))
+            f.write(write_ablation_report(out20, 160, samples, 20))
+            f.write(write_ablation_report(out10, 82, samples, 10))
         else:
-            f.write(write_report(out100, 2484, samples, 100))
-            f.write(write_report(out75, 1800, samples, 75))
-            f.write(write_report(out50, 1200, samples, 50))
-            f.write(write_report(out33, 825, samples, 33))
-            f.write(write_report(out20, 500, samples, 20))
-            f.write(write_report(out10, 250, samples, 10))
+            f.write(write_ablation_report(out100, 2484, samples, 100))
+            f.write(write_ablation_report(out75, 1800, samples, 75))
+            f.write(write_ablation_report(out50, 1200, samples, 50))
+            f.write(write_ablation_report(out33, 825, samples, 33))
+            f.write(write_ablation_report(out20, 500, samples, 20))
+            f.write(write_ablation_report(out10, 250, samples, 10))
     f.close()
     return out100, out75, out50, out33, out20, out10, mean_tb_mccs_3c, mean_v_mccs_3c, mean_tb_mccs_5c, mean_v_mccs_5c, sample_sizes
+
+
+def asymmetric_3_polarity(a: list, n: float, p: float):
+    polarities = []
+    for x in a:
+        if x > p:
+            polarities.append(1)
+        elif x < n:
+            polarities.append(-1)
+        else:
+            polarities.append(0)
+    return polarities
+
+# 3 Class Threshold Analysis function
+
+
+def threeClassTA(df: pd.DataFrame):
+    tbScores = df["TextBlob_raw"]
+    vScores = df["Vader_raw"]
+    real3 = df["Selfvalence_3c"]
+
+    positiveThresholds = np.arange(0.00, 1, 0.01)
+    negativeThresholds = np.arange(0.00, 1, 0.01) * -1
+
+    tbMCC = []
+    vMCC = []
+    pT = []
+    nT = []
+    for p in positiveThresholds:
+        for n in negativeThresholds:
+            tbScored = asymmetric_3_polarity(tbScores, n, p)
+            vScored = asymmetric_3_polarity(vScores, n, p)
+
+            pT.append(p)
+            nT.append(n)
+
+            tbMCC.append(metrics.matthews_corrcoef(real3, tbScored))
+            vMCC.append(metrics.matthews_corrcoef(real3, vScored))
+
+    return pd.DataFrame({'PositiveThresholds': pT, 'NegativeThresholds': nT, 'TextBlobMCC': tbMCC, 'VADERMCC': vMCC})
+
+# Returns a 5 class score
+
+
+def fiveClass_score(score: float, lower: float, upper: float):
+    '''
+    Individual score to 5 class score
+    '''
+    if score > upper:
+        return 2
+    elif score > lower:
+        return 1
+    elif score >= -1*lower:
+        return 0
+    elif score >= -1*upper:
+        return -1
+    elif score >= -1.0:
+        return -2
+
+# Wrapper function that applies fiveClass_score to an array
+
+
+def fcScore_list(a: list, lb: float, ub: float):
+    out = []
+    for x in a:
+        out.append(fiveClass_score(x, lb, ub))
+    return out
+
+# 5 Class Threhsold Analysis Function
+
+
+def fiveClassTA(df: pd.DataFrame):
+    tbScores = df["TextBlob_raw"]
+    vScores = df["Vader_raw"]
+    real5 = df["Selfvalence_5c"]
+
+    real5 = [-2 if x == 1 else -1 if x == 2 else 0 if x ==
+             3 else 1 if x == 4 else 2 for x in real5]
+
+    lowerbounds = np.arange(0.00, 1, 0.01)
+
+    tbMCC = []
+    vMCC = []
+    lbT = []
+    ubT = []
+    for lb in lowerbounds:
+        upperbounds = np.arange(lb+0.01, 1, 0.01)
+        for ub in upperbounds:
+            # print('ho')
+            tbScored = fcScore_list(tbScores, lb, ub)
+            vScored = fcScore_list(vScores, lb, ub)
+
+            lbT.append(lb)
+            ubT.append(ub)
+
+            tbMCC.append(metrics.matthews_corrcoef(real5, tbScored))
+            vMCC.append(metrics.matthews_corrcoef(real5, vScored))
+
+    return pd.DataFrame({'Lowerbounds': lbT, 'Upperbounds': ubT, 'TextBlobMCC': tbMCC, 'VADERMCC': vMCC})
+
+
+def heatPlots(df3: pd.DataFrame, df5: pd.DataFrame, datatype: str = 'MEAMS'):
+    # Makes the MCC heat plots
+    # df3 is the 3classTA ds
+    # df5 is the 5classTA ds
+
+    plt.subplot(2, 2, 1)
+    plt.scatter(df3["PositiveThresholds"], df3["NegativeThresholds"],
+                c=df3["VADERMCC"], s=2, linewidth=2, cmap="coolwarm")
+    clb = plt.colorbar()
+    clb.ax.set_title(' MCC', size=7)
+    plt.title("Vader MCC Scores")
+    plt.xlabel("Positive Threshold")
+    plt.ylabel("Negative Threshold")
+
+    plt.subplot(2, 2, 2)
+    plt.scatter(df3["PositiveThresholds"], df3["NegativeThresholds"],
+                c=df3["TextBlobMCC"], s=2, linewidth=2, cmap="coolwarm")
+    clb = plt.colorbar()
+    clb.ax.set_title(' MCC', size=7)
+    plt.title("TextBlob MCC Scores")
+    plt.xlabel("Positive Threshold")
+
+    plt.subplot(2, 2, 3)
+    plt.scatter(df5["Lowerbounds"], df5["Upperbounds"],
+                c=df5["VADERMCC"], s=2, linewidth=2, cmap="coolwarm")
+    clb = plt.colorbar()
+    clb.ax.set_title(' MCC', size=7)
+    plt.xlabel("Lowerbounds")
+    plt.ylabel("Upperbounds")
+
+    plt.subplot(2, 2, 4)
+    plt.scatter(df5["Lowerbounds"], df5["Upperbounds"],
+                c=df5["TextBlobMCC"], s=2, linewidth=2, cmap="coolwarm")
+    clb = plt.colorbar()
+    clb.ax.set_title(' MCC', size=7)
+    plt.xlabel("Lowerbounds")
+    plt.subplots_adjust(hspace=.3, wspace=.3)
+
+    plt.savefig(f'output/threshold_analysis_heatmaps_{datatype}.png')
+    plt.close()
+    return
+
+
+def save_thresholf_report_plot(out3: pd.DataFrame, out5: pd.DataFrame, datatype: str = 'MEAMS'):
+    '''
+    It saves all the plots and the reports in a text file
+    '''
+
+    heatPlots(out3, out5, datatype=datatype)
+    with open(f'output/threshold_analysis_report_{datatype}.txt', 'w') as f:
+        text = f'''
+        Threshold Analysis and MCC results for {datatype} Report:\n
+        Best 3-Class Thresholds - VADER: Positive: {np.round(out3["PositiveThresholds"][out3["VADERMCC"].argmax()], 2)}, Negative: {np.round(out3["NegativeThresholds"][out3["VADERMCC"].argmax()], 2)}
+        Best 3-Class Thresholds - TextBlob: Positive: {np.round(out3["PositiveThresholds"][out3["TextBlobMCC"].argmax()], 2)}, Negative: {np.round(out3["NegativeThresholds"][out3["TextBlobMCC"].argmax()], 2)}
+        Best 5-Class Thresholds - Vader: Lowerbound: {np.round(out5["Lowerbounds"][out5["VADERMCC"].argmax()], 2)}, Upperbound: {np.round(out5["Upperbounds"][out5["VADERMCC"].argmax()], 2)}
+        Best 5-Class Thresholds - TextBlob: Lowerbound: {np.round(out5["Lowerbounds"][out5["TextBlobMCC"].argmax()], 2)}, Upperbound: {np.round(out5["Upperbounds"][out5["TextBlobMCC"].argmax()], 2)}
+        MCC of Best 3-Class Thresholds - VADER: {out3["VADERMCC"][out3["VADERMCC"].argmax()]}
+        MCC of Best 3-Class Thresholds - TextBlob: {out3["TextBlobMCC"][out3["TextBlobMCC"].argmax()]}
+        MCC of Best 5-Class Thresholds - VADER: {out5["VADERMCC"][out5["VADERMCC"].argmax()]}
+        MCC of Best 5-Class Thresholds - TextBlob: {out5["TextBlobMCC"][out5["TextBlobMCC"].argmax()]}
+        '''
+        f.write(text)
+    f.close()
+    return
 
 
 if __name__ == '__main__':
@@ -236,32 +406,40 @@ if __name__ == '__main__':
         memories_list = preprocessing_pipeline(memories_list, stopwords)
         df['Memory_text'] = memories_list
 
-    vader_scores, textblob_scores, vader_scores_vis3, textblob_scores_vis3, selfvalence_scores, selfvalence_scores_vis3 = sentimentScores(
+    vader_scores_5, textblob_scores_5, vader_scores_3, textblob_scores_3, selfvalence_scores_5, selfvalence_scores_3, vader_scores_raw, textblob_scores_raw = sentimentScores(
         df=df, sentiment_threshold=sentiment_threshold)
-    mcc_vader, mcc_textblob, mcc_vader_vis3, mcc_textblob_vis3 = mcc_scores(
-        vader_scores, textblob_scores, vader_scores_vis3, textblob_scores_vis3, selfvalence_scores, selfvalence_scores_vis3)
+    mcc_vader_5, mcc_textblob_5, mcc_vader_3, mcc_textblob_3 = mcc_scores(
+        vader_scores_5, textblob_scores_5, vader_scores_3, textblob_scores_3, selfvalence_scores_5, selfvalence_scores_3)
 
-    df['Vader_3c'] = vader_scores_vis3
-    df['TextBlob_3c'] = textblob_scores_vis3
-    df['Vader_5c'] = vader_scores
-    df['TextBlob_5c'] = textblob_scores
-    df['Selfvalence_3c'] = selfvalence_scores_vis3
-    df['Selfvalence_5c'] = selfvalence_scores
+    df['Vader_3c'] = vader_scores_3
+    df['TextBlob_3c'] = textblob_scores_3
+    df['Vader_5c'] = vader_scores_5
+    df['TextBlob_5c'] = textblob_scores_5
+    df['Selfvalence_3c'] = selfvalence_scores_3
+    df['Selfvalence_5c'] = selfvalence_scores_5
+    df['Vader_raw'] = vader_scores_raw
+    df['TextBlob_raw'] = textblob_scores_raw
 
     print('\n')
-    print(f'Matthews Correlation Coefficient for Vader (5-class): {mcc_vader}')
     print(
-        f'Matthews Correlation Coefficient for Textblob (5-class): {mcc_textblob}')
+        f'Matthews Correlation Coefficient for Vader (5-class): {mcc_vader_5}')
     print(
-        f'Matthews Correlation Coefficient for Vader (3-class): {mcc_vader_vis3}')
+        f'Matthews Correlation Coefficient for Textblob (5-class): {mcc_textblob_5}')
     print(
-        f'Matthews Correlation Coefficient for Textblob (3-class): {mcc_textblob_vis3}\n')
+        f'Matthews Correlation Coefficient for Vader (3-class): {mcc_vader_3}')
+    print(
+        f'Matthews Correlation Coefficient for Textblob (3-class): {mcc_textblob_3}\n')
 
     # Calculating MCC on 100% (825 samples) of the data for original thresholds
-    out100 = pd.DataFrame({"TextBlobMCCs_3c": [mcc_textblob_vis3],
-                           "VaderMCCs_3c": [mcc_vader_vis3],
-                           "TextBlobMCCs_5c": [mcc_textblob],
-                           "VaderMCCs_5c": [mcc_vader]})
+    out100 = pd.DataFrame({"TextBlobMCCs_3c": [mcc_textblob_3],
+                           "VaderMCCs_3c": [mcc_vader_3],
+                           "TextBlobMCCs_5c": [mcc_textblob_5],
+                           "VaderMCCs_5c": [mcc_vader_5]})
 
-    out100, out75, out50, out33, out20, out10, mean_tb_mccs_3c, mean_v_mccs_3c, mean_tb_mccs_5c, mean_v_mccs_5c, sample_sizes = save_report_plot(
+    out100, out75, out50, out33, out20, out10, mean_tb_mccs_3c, mean_v_mccs_3c, mean_tb_mccs_5c, mean_v_mccs_5c, sample_sizes = save_ablation_report_plot(
         df=df, datatype=datatype, out100=out100, samples=50)
+
+    out3 = threeClassTA(df)
+    out5 = fiveClassTA(df)
+
+    save_thresholf_report_plot(out3, out5, datatype)
