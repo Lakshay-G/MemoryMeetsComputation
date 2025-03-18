@@ -648,6 +648,7 @@ if __name__ == '__main__':
     df_columns = df.columns.to_list()
     print(f'Data columns are :: \n{df_columns}')
 
+    # Uncomment the below 3 lines for sentiment analysis of rIAMs dataset
     # df['Memory_text'] = df['r_mem_s_4_text']
     # df['Valence'] = df['r_mem_s_13_valence']
     # df['Valence'] = df['Valence'].replace({-2: 1, -1: 2, 0: 3, 1: 4, 2: 5})
@@ -658,21 +659,15 @@ if __name__ == '__main__':
         memories_list = preprocessing_pipeline(memories_list, stopwords)
         df['Memory_text'] = memories_list
 
-    # Ensures to get the repeated results
-    # random.seed(seed_value)
-    # np.random.seed(seed_value)
-
-    # Find and print the unique values from the cue type: [Song, Condition, Year, Singer]
-    # cue_type = 'Singer'
-
-    # for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
-    #     # Check if output folders exist or not, if not then create the folders
-    #     check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
-    #     check_create_folders(path=f"{confusion_output_path}/{cue_type}")
-    #     # for cue_type in ['Year']:
-    #     print(cue_type)
-    #     sentimentByCueType(cue_type=cue_type, df=df,
-    #                        sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
+    # Comment the below 8 lines for sentiment analysis of rIAMs dataset
+    for cue_type in ['Song', 'Singer', 'Year', 'Condition']:
+        # Check if output folders exist or not, if not then create the folders
+        check_create_folders(path=f"{sentiment_output_path}/{cue_type}")
+        check_create_folders(path=f"{confusion_output_path}/{cue_type}")
+        # for cue_type in ['Year']:
+        print(cue_type)
+        sentimentByCueType(cue_type=cue_type, df=df,
+                           sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
 
     sentimentOverall(
         df=df, sentiment_output_path=sentiment_output_path, confusion_output_path=confusion_output_path, method=sentiment_type)
