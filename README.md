@@ -5,15 +5,14 @@ This repository consists of all the code required by the paper []. This paper pr
 <details>
 <summary><h2> Table of Contents </h2></summary>
 
-1. [Getting Started](#getting-started)
-2. [Installation](#installation)
-3. [Repository Sitemap](#repository-sitemap)
-4. [Setup](#setup)
-5. [Preprocessing Pipeline](#preprocessing-pipeline)
-6. [Sentiment Analysis](#sentiment-analysis)
-7. [Word Cloud and Word Counts](#word-cloud-and-word-counts)
-8. [Ablation and Threshold Analysis](#ablation-and-threshold-analysis)
-9. [Running the Analysis](#running-the-analysis)
+1. [Installation](#installation)
+2. [Repository Sitemap](#repository-sitemap)
+3. [Setup](#setup)
+4. [Preprocessing Pipeline](#preprocessing-pipeline)
+5. [Sentiment Analysis](#sentiment-analysis)
+6. [Word Cloud and Word Counts](#word-cloud-and-word-counts)
+7. [Ablation and Threshold Analysis](#ablation-and-threshold-analysis)
+8. [Running the Analysis](#running-the-analysis)
 </details>
 
 ## Installation
