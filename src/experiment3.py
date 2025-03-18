@@ -344,7 +344,7 @@ def heatPlots(df3: pd.DataFrame, df5: pd.DataFrame, datatype: str = 'MEAMS'):
     return
 
 
-def save_thresholf_report_plot(out3: pd.DataFrame, out5: pd.DataFrame, datatype: str = 'MEAMS'):
+def save_threshold_report_plot(out3: pd.DataFrame, out5: pd.DataFrame, datatype: str = 'MEAMS'):
     '''
     It saves all the plots and the reports in a text file
     '''
@@ -442,4 +442,4 @@ if __name__ == '__main__':
     out3 = threeClassTA(df)
     out5 = fiveClassTA(df)
 
-    save_thresholf_report_plot(out3, out5, datatype)
+    save_threshold_report_plot(out3, out5, datatype)
