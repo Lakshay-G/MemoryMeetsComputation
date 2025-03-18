@@ -37,6 +37,7 @@ This repository consists of all the code required by the paper []. This paper pr
    - [preprocess.py](src/preprocess.py): Contains complete preprocessing pipeline used before analysis
    - [sentiment_analysis.py](src/sentiment_analysis.py): Contains code for sentiment analysis as a form of histograms and confusion matrices
    - [snowball_stopwords_extract.R](src/snowball_stopwords_extract.R): Contains _R_ code to extract the stopwords list
+   - [experiment3.py](src/experiment3.py): Contains code for ablation studies and threshold analysis.
    - [word_cloud.py](src/word_cloud.py): Contains code for word clouds and top 10 word counts plots
 4. [LICENSE](LICENSE): Licence for the project
 5. [README.md](README.md): Documentation for the project
@@ -74,7 +75,7 @@ This repository consists of all the code required by the paper []. This paper pr
 
 ## Preprocessing Pipeline
 
-The `preprocessing_pipeline` function in `src/preprocess.py`(src/preprocess.py) file, and include the following steps:
+The `preprocessing_pipeline` function in [src/preprocess.py](src/preprocess.py) file, and include the following steps:
 
 1. **Tokenization**: Splits text into individual tokens.
 2. **Lowercasing**: Converts all text to lowercase.
@@ -85,7 +86,7 @@ The `preprocessing_pipeline` function in `src/preprocess.py`(src/preprocess.py) 
 
 ## Sentiment Analysis
 
-The `src/sentiment_analysis.py`(src/sentiment_analysis.py) script performs sentiment analysis for the two methods, VADER and TextBlob. It includes:
+The [src/sentiment_analysis.py](src/sentiment_analysis.py) script performs sentiment analysis for the two methods, VADER and TextBlob. It includes:
 
 1. **VADER Sentiment Analysis**: Calculates sentiment scores using the VADER library.
 2. **TextBlob Sentiment Analysis**: Calculates sentiment scores using the TextBlob library.
