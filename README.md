@@ -19,9 +19,13 @@ This repository consists of all the code required by the paper []. This paper pr
 ## Installation
 
 1. Clone this repository using
-   `git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git`
+   ```bash
+   git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git
+   ```
 2. Install the required _Python_ libraries using
-   `pip install -r requirements.txt`
+   ```bash
+   pip install -r requirements.txt
+   ```
 3. Download **snowball stopwords list** from [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda)
 
 ## Repository Sitemap
@@ -66,7 +70,7 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
 
-3. Run the scripts in the `src/`(src/) folder for specific tasks.
+3. Run the scripts in the [src/](src/) folder for specific tasks.
 
 ## Preprocessing Pipeline
 
@@ -92,14 +96,14 @@ The `src/sentiment_analysis.py`(src/sentiment_analysis.py) script performs senti
 
 ## Word Cloud and Word Counts
 
-The word cloud and top 10 word count analysis are implemented in `src/word_cloud.py`(src/word_cloud.py). It includes:
+The word cloud and top 10 word count analysis are implemented in [src/word_cloud.py](src/word_cloud.py). It includes:
 
 1. **Word Cloud Generation**: Creates word clouds for the most words in the dataset.
 2. **Top 10 Word Counts**: Generates bar plots for the top 10 most frequent words.
 
 ## Ablation and Threshold Analysis
 
-The ablation and optimal threshold analysis are implemented in `src/experiment3.py`(src/experiment3.py). It includes:
+The ablation and optimal threshold analysis are implemented in [src/experiment3.py](src/experiment3.py). It includes:
 src/experiment3.py. It includes:
 
 1. **Ablation Studies**: Evaluates the performance of sentiment analysis models on subsets of the dataset.
