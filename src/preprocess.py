@@ -69,7 +69,7 @@ def find_custom_stopwords(memories_list):
     return custom_stopwords
 
 
-def remove_puncuation(memory):
+def remove_punctuation(memory):
 
     # Regex pattern to match all punctuation marks
     pattern = r"[^\w\s]"
@@ -98,7 +98,7 @@ def preprocessing_pipeline(memories_list, stopwords):
 
     # 3. remove all the punctuation marks now
     print("Step 3:: Removing punctuation marks!\n")
-    memories_list = [remove_puncuation(memory) for memory in memories_list]
+    memories_list = [remove_punctuation(memory) for memory in memories_list]
 
     # 4. now check for custom stopwords based on words occuring >3SDs away
     print("Step 4:: Finding custom stopwords!")

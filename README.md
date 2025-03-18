@@ -1,25 +1,30 @@
 # MemoryMeetsComputation
 
-This repository consists of all the code required by the paper []. This paper provides a compehensive study for sentiment analysis for psychology data. Currently we are comparing existing methods of [VADER](https://github.com/cjhutto/vaderSentiment) and [TextBlob](https://github.com/sloria/TextBlob) for two different datasets. Briefly, we're doing 4 things: (a) sentiment analysis (b) metrics for the sentiment analysis (c) wordcloud generation (d) top word counts; in this code.
+This repository consists of all the code required by the paper []. This paper provides a compehensive study for sentiment analysis for psychology data. Currently we are comparing existing methods of [VADER](https://github.com/cjhutto/vaderSentiment) and [TextBlob](https://github.com/sloria/TextBlob) for two different datasets, [MEAM - Music Evoked Autobiographical Memories](asset/rIAMs_dataset_20250201.xlsx), and [rIAM - recurrent, Involuntary Autobiographical Memories](asset/rIAMs_dataset_20250201.xlsx). Briefly, we're doing 6 things: (a) sentiment analysis, (b) metrics for the sentiment analysis, (c) wordcloud generation, (d) top word counts, (e) ablation analysis, (f) optimal threshold analysis; in this code.
 
-<details>
+<details open>
 <summary><h2> Table of Contents </h2></summary>
 
-1. [Getting Started](#getting-started)
-2. [Installation](#installation)
-3. [Repository Sitemap](#repository-sitemap)
-4. [Usage](#usage)
-
+1. [Installation](#installation)
+2. [Repository Sitemap](#repository-sitemap)
+3. [Setup](#setup)
+4. [Preprocessing Pipeline](#preprocessing-pipeline)
+5. [Sentiment Analysis](#sentiment-analysis)
+6. [Word Cloud and Word Counts](#word-cloud-and-word-counts)
+7. [Ablation and Threshold Analysis](#ablation-and-threshold-analysis)
+8. [Running the Analysis](#running-the-analysis)
 </details>
-
-## Getting Started
 
 ## Installation
 
 1. Clone this repository using
-   `git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git`
+   ```bash
+   git clone https://github.com/Lakshay-G/MemoryMeetsComputation.git
+   ```
 2. Install the required _Python_ libraries using
-   `pip install -r requirements.txt`
+   ```bash
+   pip install -r requirements.txt
+   ```
 3. Download **snowball stopwords list** from [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda)
 
 ## Repository Sitemap
@@ -31,12 +36,13 @@ This repository consists of all the code required by the paper []. This paper pr
    - [preprocess.py](src/preprocess.py): Contains complete preprocessing pipeline used before analysis
    - [sentiment_analysis.py](src/sentiment_analysis.py): Contains code for sentiment analysis as a form of histograms and confusion matrices
    - [snowball_stopwords_extract.R](src/snowball_stopwords_extract.R): Contains _R_ code to extract the stopwords list
+   - [experiment3.py](src/experiment3.py): Contains code for ablation studies and threshold analysis.
    - [word_cloud.py](src/word_cloud.py): Contains code for word clouds and top 10 word counts plots
 4. [LICENSE](LICENSE): Licence for the project
 5. [README.md](README.md): Documentation for the project
 6. [requirements.txt](requirements.txt): Python dependencies
 
-## Usage
+## Setup
 
 1. Since [data_stopwords_snowball.rda](https://github.com/quanteda/stopwords/blob/master/data/data_stopwords_snowball.rda) is an _R_ object, we need to extract the stopwords list for using it in _Python_.
 
@@ -64,4 +70,70 @@ This repository consists of all the code required by the paper []. This paper pr
 
    - `"output"`: contains paths to all the output files; `wordcloud`, `wordcounts`, `sentiment histogram`, `confusion matrices` in the `output` folder.
 
-3. Code for the entire preprocessing pipeline is `src/preprocess.py` script. [[NEED TO ADD PREPROCESSING STEPS]]
+3. Run the scripts in the [src/](src/) folder for specific tasks.
+
+## Preprocessing Pipeline
+
+The `preprocessing_pipeline` function in [src/preprocess.py](src/preprocess.py) file, and include the following steps:
+
+1. **Tokenization**: Splits text into individual tokens.
+2. **Lowercasing**: Converts all text to lowercase.
+3. **Lemmatization**: Reduces words to their base forms.
+4. **Stopword Removal**: Removing snowball stopwords (without negators and including 's token).
+5. **Punctuation Removal**: Removes all punctuation marks.
+6. **Custom Stopwords**: Finding custom stopwords based on words occuring >3SDs away and then removing those custom stopwords.
+
+## Sentiment Analysis
+
+The [src/sentiment_analysis.py](src/sentiment_analysis.py) script performs sentiment analysis for the two methods, VADER and TextBlob. It includes:
+
+1. **VADER Sentiment Analysis**: Calculates sentiment scores using the VADER library.
+2. **TextBlob Sentiment Analysis**: Calculates sentiment scores using the TextBlob library.
+3. **Histogram Generation**: Generates histograms for sentiment scores.
+4. **Confusion Matrices**: Compares predicted sentiment scores with ground truth values.
+
+**NOTE**: One may need to uncomment/comment some lines when using _rIAMs_ dataset mentioned in 651 and 662 lines.
+
+## Word Cloud and Word Counts
+
+The word cloud and top 10 word count analysis are implemented in [src/word_cloud.py](src/word_cloud.py). It includes:
+
+1. **Word Cloud Generation**: Creates word clouds for the most words in the dataset.
+2. **Top 10 Word Counts**: Generates bar plots for the top 10 most frequent words.
+
+## Ablation and Threshold Analysis
+
+The ablation and optimal threshold analysis are implemented in [src/experiment3.py](src/experiment3.py). It includes:
+src/experiment3.py. It includes:
+
+1. **Ablation Studies**: Evaluates the performance of sentiment analysis models on subsets of the dataset.
+2. **Optimal Threshold Analysis**:
+   - 3-Class Threshold Analysis: Finds the best positive and negative thresholds for - 3-class sentiment classification.
+   - 5-Class Threshold Analysis: Finds the best lower and upper bounds for 5-class sentiment classification.
+3. **Metrics**: Calculates Matthews Correlation Coefficient (MCC) for both VADER and TextBlob.
+4. **Visualization**:
+   - Threshold analysis: Generates heatmaps for MCC scores across different thresholds. Saves reports summarizing the best thresholds and their corresponding MCC scores.
+   - Ablation analysis: Generates lineplot for average MCC scores across different sample sizes. Saves reports summarizing the average MCC scoress across different datasets.
+
+**NOTE**: One may need to make some changes at line 394 when using _rIAMs_ dataset.
+
+## Running the Analysis
+
+1. Set up the parameters in `params.json`
+2. Run the preprocessing pipeline:
+   ```bash
+   python src/preprocess.py
+   ```
+   It is also integrated with the other scripts for use, so one may not need to run this separately.
+3. Perform sentiment analysis and confusion matrices:
+   ```bash
+   python src/sentiment_analysis.py
+   ```
+4. Generate word cloud and top 10 word count visualizations:
+   ```bash
+   python src/word_cloud.py
+   ```
+5. Run ablation studies and optimal threshold analysis:
+   ```bash
+   python src/experiment3.py
+   ```
