@@ -2,7 +2,7 @@
 
 This repository consists of all the code required by the paper []. This paper provides a compehensive study for sentiment analysis for psychology data. Currently we are comparing existing methods of [VADER](https://github.com/cjhutto/vaderSentiment) and [TextBlob](https://github.com/sloria/TextBlob) for two different datasets, [MEAM - Music Evoked Autobiographical Memories](asset/rIAMs_dataset_20250201.xlsx), and [rIAM - recurrent, Involuntary Autobiographical Memories](asset/rIAMs_dataset_20250201.xlsx). Briefly, we're doing 6 things: (a) sentiment analysis, (b) metrics for the sentiment analysis, (c) wordcloud generation, (d) top word counts, (e) ablation analysis, (f) optimal threshold analysis; in this code.
 
-<details>
+<details open>
 <summary><h2> Table of Contents </h2></summary>
 
 1. [Installation](#installation)
