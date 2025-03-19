@@ -101,6 +101,8 @@ The word cloud and top 10 word count analysis are implemented in [src/word_cloud
 1. **Word Cloud Generation**: Creates word clouds for the most words in the dataset.
 2. **Top 10 Word Counts**: Generates bar plots for the top 10 most frequent words.
 
+**NOTE**: One may need to uncomment/comment some lines when using _rIAMs_ dataset mentioned in 231 and 242 lines.
+
 ## Ablation and Threshold Analysis
 
 The ablation and optimal threshold analysis are implemented in [src/experiment3.py](src/experiment3.py). It includes:
